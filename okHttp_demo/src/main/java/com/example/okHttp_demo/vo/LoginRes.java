@@ -2,18 +2,18 @@ package com.example.okHttp_demo.vo;
 
 public class LoginRes {
 
-  private String account;
+  private String employeeId;
   
   private String password;
   
-  private String name;
+  private String authorizationRank;
 
-public String getAccount() {
-    return account;
+public String getEmployeeId() {
+    return employeeId;
 }
 
-public void setAccount(String account) {
-    this.account = account;
+public void setEmployeeId(String employeeId) {
+    this.employeeId = employeeId;
 }
 
 public String getPassword() {
@@ -24,12 +24,12 @@ public void setPassword(String password) {
     this.password = password;
 }
 
-public String getName() {
-    return name;
+public String getAuthorizationRank() {
+    return authorizationRank;
 }
 
-public void setName(String name) {
-    this.name = name;
+public void setAuthorizationRank(String authorizationRank) {
+    this.authorizationRank = authorizationRank;
 }
 
 public LoginRes() {
@@ -37,11 +37,11 @@ public LoginRes() {
     // TODO Auto-generated constructor stub
 }
 
-public LoginRes(String account, String password, String name) {
+public LoginRes(String employeeId, String password, String authorizationRank) {
     super();
-    this.account = account;
+    this.employeeId = employeeId;
     this.password = password;
-    this.name = name;
+    this.authorizationRank = authorizationRank;
 }
-
+  
 }

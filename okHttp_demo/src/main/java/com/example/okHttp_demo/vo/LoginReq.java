@@ -1,17 +1,20 @@
 package com.example.okHttp_demo.vo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class LoginReq {
     
-    private String account;
+    @JsonProperty("employee_id")
+    private String employeeId;
     
     private String password;
 
-    public String getAccount() {
-        return account;
+    public String getEmployeeId() {
+        return employeeId;
     }
 
-    public void setAccount(String account) {
-        this.account = account;
+    public void setEmployeeId(String employeeId) {
+        this.employeeId = employeeId;
     }
 
     public String getPassword() {

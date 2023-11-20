@@ -2,8 +2,9 @@ package com.example.okHttp_demo.constants;
 
 public enum RtnCode {
 
-    SUCCESSFUL("200", "successful!"),
-    FAILED("400", "failed!");
+    SUCCESSFUL("200", "ログインしました"),
+    ACCOUNT_NOT_EXIST_ERROR("400", "該当の社員が見当たりません"),
+    PASSWORD_ERROR("400", "パスワードが間違っています");
     
     private String code;
     
