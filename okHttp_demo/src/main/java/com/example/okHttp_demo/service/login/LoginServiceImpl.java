@@ -20,11 +20,11 @@ public class LoginServiceImpl implements LoginService{
     private UserDao uDao;
 
     /**
-     * ログインユーザーが存在するかどうかを確認し、アカウント情報とユーザーの役割を返する。 作成者:INEXT_奥田
+     * ログインユーザーが存在するかどうかを確認し、パスワードを確認し、ログイン結果を返する。 作成者:許智偉
      *
-     * @param accountDto 確認するログインユーザーのアカウント情報
-     * @param userRole   ユーザーの役割
-     * @return アカウント情報
+     * @param account 社員番号
+     * @param password パスワード
+     * @return ログイン結果
      */
     @Override
     public BaseResponse<LoginRes> Login(String account, String password) {
@@ -44,7 +44,7 @@ public class LoginServiceImpl implements LoginService{
         }
         
 //      ログイン結果を返す
-        LoginRes loginRes = new LoginRes(res.getEmployeeId(), res.getPassword(), res.getAuthorizationRank());
+        LoginRes loginRes = new LoginRes(res.getPersonalNo(), res.getPassword(), res.getAppAuthority());
         return new BaseResponse<LoginRes>(RtnCode.SUCCESSFUL.getCode(), RtnCode.SUCCESSFUL.getMessage(), loginRes);
         
     }

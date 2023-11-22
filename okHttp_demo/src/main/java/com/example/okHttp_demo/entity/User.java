@@ -10,21 +10,21 @@ import javax.persistence.Table;
 public class User {
     
     @Id
-    @Column(name = "employee_id") 
-    private String employeeId;
+    @Column(name = "PERSONAL_NO") 
+    private String personalNo;
     
-    @Column(name = "password")
+    @Column(name = "PASSWORD")
     private String password;
 
-    @Column(name = "authorization_rank")
-    private String authorizationRank;
+    @Column(name = "APP_AUTHORITY")
+    private String appAuthority;
 
-    public String getEmployeeId() {
-        return employeeId;
+    public String getPersonalNo() {
+        return personalNo;
     }
 
-    public void setEmployeeId(String employeeId) {
-        this.employeeId = employeeId;
+    public void setPersonalNo(String personalNo) {
+        this.personalNo = personalNo;
     }
 
     public String getPassword() {
@@ -35,12 +35,12 @@ public class User {
         this.password = password;
     }
 
-    public String getAuthorizationRank() {
-        return authorizationRank;
+    public String getAppAuthority() {
+        return appAuthority;
     }
 
-    public void setAuthorizationRank(String authorizationRank) {
-        this.authorizationRank = authorizationRank;
+    public void setAppAuthority(String appAuthority) {
+        this.appAuthority = appAuthority;
     }
 
     public User() {
@@ -48,11 +48,11 @@ public class User {
         // TODO Auto-generated constructor stub
     }
 
-    public User(String employeeId, String password, String authorizationRank) {
+    public User(String personalNo, String password, String appAuthority) {
         super();
-        this.employeeId = employeeId;
+        this.personalNo = personalNo;
         this.password = password;
-        this.authorizationRank = authorizationRank;
+        this.appAuthority = appAuthority;
     }
 
 }

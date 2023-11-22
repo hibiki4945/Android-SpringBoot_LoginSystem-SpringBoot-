@@ -34,7 +34,7 @@ public class LoginController {
     {
         
 //      ログインする
-        BaseResponse<LoginRes> res = mService.Login(req.getEmployeeId(), req.getPassword());
+        BaseResponse<LoginRes> res = mService.Login(req.getPersonalNo(), req.getPassword());
         if(!res.getStatus().matches("200")) {
             return new BaseResponse<LoginRes>(res.getStatus(),res.getMessage(),null);
         }
