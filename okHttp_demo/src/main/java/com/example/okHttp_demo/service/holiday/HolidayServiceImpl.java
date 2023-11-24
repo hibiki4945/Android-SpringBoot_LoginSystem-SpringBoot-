@@ -154,12 +154,22 @@ public class HolidayServiceImpl implements HolidayService{
         
         holidayAcquire.setReason(reason);
         
+        holidayAcquire.setRegAuthor(personalNo);
+        
+        LocalDate localDate = LocalDate.now();
+        
+        holidayAcquire.setRegYear(String.valueOf(localDate.getYear()));
+
+        holidayAcquire.setRegMonth(String.valueOf(localDate.getMonthValue()));
+        
+        holidayAcquire.setRegDay(String.valueOf(localDate.getDayOfMonth()));
+        
         if (hDao.save(holidayAcquire) == null) {
             return new BaseResponse<HolidayAcquireRes>(RtnCode.INSERT_ERROR.getCode(), RtnCode.INSERT_ERROR.getMessage(), null);
         }
         
         this.updateCalendarNoSequence();
-        return new BaseResponse<HolidayAcquireRes>(RtnCode.INSERT_SUCCESSFUL.getCode(), RtnCode.INSERT_SUCCESSFUL.getMessage(), null);
+        return new BaseResponse<HolidayAcquireRes>(RtnCode.INSERT_SUCCESSFUL.getCode(), RtnCode.INSERT_SUCCESSFUL.getMessage(), new HolidayAcquireRes(holidayAcquire.getCalendarNo()));
     }
 
 
