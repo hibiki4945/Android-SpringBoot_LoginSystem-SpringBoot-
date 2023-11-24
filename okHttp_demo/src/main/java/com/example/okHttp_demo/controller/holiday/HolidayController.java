@@ -23,29 +23,24 @@ public class HolidayController {
     private HolidayService hService;
 
     /**
-     * ログインする。
+     * 休暇申込をデータベースに追加する。
      * 作成者:許智偉
      *
-     * @param req  ログインに必要なデータ
-     * @return ログインの結果
+     * @param req  休暇申込に必要なデータ
+     * @return 休暇申込の追加結果
      */
     @PostMapping("/holiday_acquire")
     public BaseResponse<HolidayAcquireRes> HolidayAcquire(@RequestBody HolidayAcquireReq req)
     {
         
-//      ログインする
-        BaseResponse<HolidayAcquireRes> res = hService.HolidayAcquire(req.getPersonalNo(),
-                                                                      req.getStartDate(),
-                                                                      req.getStartTime(),
-                                                                      req.getEndDate(),
-                                                                      req.getEndTime(),
-                                                                      req.getLeaveType(),
-                                                                      req.getReason());
+//      休暇申込をデータベースに追加する
+        BaseResponse<HolidayAcquireRes> res = hService.HolidayAcquire(req.getPersonalNo(),req.getStartDate(),req.getStartTime(),req.getEndDate(),req.getEndTime(),req.getLeaveType(),req.getReason());
+//      休暇申込の追加結果を確認
         if(!res.getStatus().matches("200")) {
             return new BaseResponse<HolidayAcquireRes>(res.getStatus(),res.getMessage(),null);
         }
         
-//      ログインの結果を返す
+//      休暇申込の追加結果を返す
         return new BaseResponse<HolidayAcquireRes>(RtnCode.INSERT_SUCCESSFUL.getCode(),RtnCode.INSERT_SUCCESSFUL.getMessage(), res.getData());
     }
     

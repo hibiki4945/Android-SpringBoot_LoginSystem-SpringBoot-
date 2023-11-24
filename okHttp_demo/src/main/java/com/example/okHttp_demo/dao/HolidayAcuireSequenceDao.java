@@ -9,9 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface HolidayAcuireSequenceDao extends JpaRepository<HolidayAcquireSequence, Integer>{
 
-//    // カレンダーナンバーの採番を更新する
-//    Integer updateCalendarNoSequence();
-    
+    // カンターを更新する
     @Modifying
     @Transactional
     @Query(value = "update holiday_acquire_sequence h"

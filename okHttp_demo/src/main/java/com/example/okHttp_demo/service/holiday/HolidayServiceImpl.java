@@ -26,12 +26,13 @@ public class HolidayServiceImpl implements HolidayService{
     private HolidayAcuireSequenceDao hsDao;
     
     /**
-     * カレンダーナンバーの採番を取得する。 作成者:
+     * カレンダーナンバーの採番を取得する。 作成者:許智偉
      *
      * @return カレンダーナンバー採番
      */
     @Override
     public String getCalendarNoSequence() {
+//      現在時刻を取得
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         String localDate = dtf.format(LocalDate.now());
         String yearNow = localDate.substring(0,4);
@@ -42,34 +43,48 @@ public class HolidayServiceImpl implements HolidayService{
                 hsDao.updateById(item.getIdNumber(), 0);
             }
         }
-        
+//      CalendarNoのカンターを取得
         List<HolidayAcquireSequence> res = hsDao.findAll();
         int idNumber = 0;
         for (HolidayAcquireSequence item : res) {
             idNumber = item.getIdNumber();
         }
 
+//      CalendarNoのカンターを返す
         return String.format(yearNow+"%02d", idNumber);
     }
 
     /**
-     * カレンダーナンバー採番を更新する。 作成者:
+     * カレンダーナンバー採番を更新する。 作成者:許智偉
      *
      * @return 更新されたカレンダーナンバー採番
      */
     @Override
     public Integer updateCalendarNoSequence() {
         
-
+//      CalendarNoのカンターを取得
         List<HolidayAcquireSequence> res = hsDao.findAll();
         int idNumber = 0;
         for (HolidayAcquireSequence item : res) {
             idNumber = item.getIdNumber();
         }
         
+//      CalendarNoのカンターを更新
         return hsDao.updateById(idNumber, idNumber+1); 
     }
-    
+
+    /**
+     * 休暇申込を作成し、データベースに追加する。 作成者:許智偉
+     *
+     * @param personalNo 社員番号
+     * @param startDate 開始日付
+     * @param startTime 開始時間
+     * @param endDate 終了日付
+     * @param endTime 終了時間
+     * @param leaveType 休暇番号
+     * @param reason 休暇理由
+     * @return 休暇申込の作成結果
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public BaseResponse<HolidayAcquireRes> HolidayAcquire(String personalNo, String startDate, String startTime0, String endDate, String endTime0, String leaveType, String reason) {
@@ -95,24 +110,24 @@ public class HolidayServiceImpl implements HolidayService{
            !StringUtils.hasText(reason)) {
             return new BaseResponse<HolidayAcquireRes>(RtnCode.INPUT_EMPTY_ERROR.getCode(), RtnCode.INPUT_EMPTY_ERROR.getMessage(), null);
         }
-        
+//      時間の分離
         String[] startDateNew = startDate.split("-");
         String[] startTimeNew = startTime0.split(":");
         String[] endDateNew = endDate.split("-");
         String[] endTimeNew = endTime0.split(":");
-        
+//      時間を数字へと変換
         startYear = Integer.parseInt(startDateNew[0]);
         startMonth = Integer.parseInt(startDateNew[1]);
         startDay = Integer.parseInt(startDateNew[2]);
         startTime = Integer.parseInt(startTimeNew[0])+Integer.parseInt(startTimeNew[1]);
         startTimeSave = startTimeNew[0]+startTimeNew[1];
-
         endYear = Integer.parseInt(endDateNew[0]);
         endMonth = Integer.parseInt(endDateNew[1]);
         endDay = Integer.parseInt(endDateNew[2]);
         endTime = Integer.parseInt(endTimeNew[0])+Integer.parseInt(endTimeNew[1]);
         endTimeSave = endTimeNew[0]+endTimeNew[1];
-        
+
+//      開始時間が終了時間より先かを確認
         if(startYear >= endYear &&
            startMonth >= endMonth &&
            startDay >= endDay &&
@@ -120,29 +135,28 @@ public class HolidayServiceImpl implements HolidayService{
             return new BaseResponse<HolidayAcquireRes>(RtnCode.TIME_INTERVAL_ERROR.getCode(), RtnCode.TIME_INTERVAL_ERROR.getMessage(), null);
         }
         
-//        1. 轉換所需資料(以存到DB)
         HolidayAcquire holidayAcquire = new HolidayAcquire();
-        
+//      カレンダーナンバーを設定
         holidayAcquire.setCalendarNo(this.getCalendarNoSequence());
-        
+//      開始年を設定
         holidayAcquire.setStartYear(String.valueOf(startYear));
-
+//      開始月を設定
         holidayAcquire.setStartMonth(String.valueOf(startMonth));
-        
+//      開始月を設定
         holidayAcquire.setStartDay(String.valueOf(startDay));
-        
+//      開始時を設定
         holidayAcquire.setStartTime(startTimeSave);
-        
+//      終了年を設定        
         holidayAcquire.setEndYear(String.valueOf(endYear));
-
+//      終了月を設定
         holidayAcquire.setEndMonth(String.valueOf(endMonth));
-        
+//      終了月を設定
         holidayAcquire.setEndDay(String.valueOf(endDay));
-        
+//      終了時を設定
         holidayAcquire.setEndTime(endTimeSave);
-        
+//      休暇日数を設定
         holidayAcquire.setVacationDays(endDay-startDay+1);
-        
+//      休暇番号を設定
         if(leaveType.matches("私用"))
             holidayAcquire.setVacationNo("11");
         else if(leaveType.matches("体調不良"))
@@ -151,24 +165,27 @@ public class HolidayServiceImpl implements HolidayService{
             holidayAcquire.setVacationNo("13");
         else
             holidayAcquire.setVacationNo("14");
-        
+//      休暇理由を設定
         holidayAcquire.setReason(reason);
-        
+//      作成者を設定
         holidayAcquire.setRegAuthor(personalNo);
-        
+//      現在時刻を取得
         LocalDate localDate = LocalDate.now();
-        
+//      作成年を設定
         holidayAcquire.setRegYear(String.valueOf(localDate.getYear()));
-
+//      作成月を設定
         holidayAcquire.setRegMonth(String.valueOf(localDate.getMonthValue()));
-        
+//      作成時を設定
         holidayAcquire.setRegDay(String.valueOf(localDate.getDayOfMonth()));
-        
+//      休暇申込をデータベースに追加
         if (hDao.save(holidayAcquire) == null) {
             return new BaseResponse<HolidayAcquireRes>(RtnCode.INSERT_ERROR.getCode(), RtnCode.INSERT_ERROR.getMessage(), null);
         }
         
+//      CalendarNoのカンターを更新
         this.updateCalendarNoSequence();
+        
+//      休暇申込の作成結果を返す
         return new BaseResponse<HolidayAcquireRes>(RtnCode.INSERT_SUCCESSFUL.getCode(), RtnCode.INSERT_SUCCESSFUL.getMessage(), new HolidayAcquireRes(holidayAcquire.getCalendarNo()));
     }
 
