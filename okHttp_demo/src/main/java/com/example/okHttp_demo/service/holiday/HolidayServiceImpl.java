@@ -177,6 +177,16 @@ public class HolidayServiceImpl implements HolidayService{
         holidayAcquire.setRegMonth(String.valueOf(localDate.getMonthValue()));
 //      作成時を設定
         holidayAcquire.setRegDay(String.valueOf(localDate.getDayOfMonth()));
+
+//      更新者を設定
+        holidayAcquire.setUptAuthor(personalNo);
+//      更新年を設定
+        holidayAcquire.setUptYear(String.valueOf(localDate.getYear()));
+//      更新月を設定
+        holidayAcquire.setUptMonth(String.valueOf(localDate.getMonthValue()));
+//      更新時を設定
+        holidayAcquire.setUptDay(String.valueOf(localDate.getDayOfMonth()));
+
 //      休暇申込をデータベースに追加
         if (hDao.save(holidayAcquire) == null) {
             return new BaseResponse<HolidayAcquireRes>(RtnCode.INSERT_ERROR.getCode(), RtnCode.INSERT_ERROR.getMessage(), null);

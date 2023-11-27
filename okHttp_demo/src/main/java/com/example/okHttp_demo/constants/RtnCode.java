@@ -8,7 +8,9 @@ public enum RtnCode {
     PASSWORD_ERROR("400", "パスワードが間違っています"),
     INPUT_EMPTY_ERROR("400", "入力内容が欠けている"),
     TIME_INTERVAL_ERROR("400", "日付の入力内容が間違っています"),
-    INSERT_ERROR("400", "追加に失敗しました");
+    INSERT_ERROR("400", "追加に失敗しました"),
+    SEARCHING_EMPTY("200", "検索結果なし"),
+    SEARCHING_SUCCESSFUL("200", "検索結果あり");
     
     private String code;
     
