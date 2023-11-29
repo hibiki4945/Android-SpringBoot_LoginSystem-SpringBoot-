@@ -15,16 +15,20 @@ public class RecordServiceImpl implements RecordService{
 
     @Autowired
     private HolidayAcuireDao hDao;
-    
+
+    /**
+     * 自分の休暇申込を検索する。 作成者:許智偉
+     *
+     * @param req 休暇申込の検索に必要なデータ
+     * @return 休暇申込の検索結果
+     */
     @Override
     public BaseResponse<List<HolidayAcquire>> RecordShow(HolidayRecordReq req) {
         
+//      自分の休暇申込を検索
         List<HolidayAcquire> res = hDao.findByRegAuthor(req.getRegAuthor());
         
-//        if(res == null) {
-//            return new BaseResponse<List<HolidayAcquire>>(RtnCode.SEARCHING_EMPTY.getCode(), RtnCode.SEARCHING_EMPTY.getMessage(), null);
-//        }
-        
+//      休暇申込の検索結果を返す
         return new BaseResponse<List<HolidayAcquire>>(RtnCode.SEARCHING_SUCCESSFUL.getCode(), RtnCode.SEARCHING_SUCCESSFUL.getMessage(), res);
         
     }
