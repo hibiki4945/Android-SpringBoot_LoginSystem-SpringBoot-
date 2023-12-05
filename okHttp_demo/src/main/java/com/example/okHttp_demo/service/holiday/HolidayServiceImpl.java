@@ -107,7 +107,11 @@ public class HolidayServiceImpl implements HolidayService{
            !StringUtils.hasText(endDate) ||
            !StringUtils.hasText(endTime0) ||
            !StringUtils.hasText(leaveType) ||
-           !StringUtils.hasText(reason)) {
+           !StringUtils.hasText(reason) ||
+           startDate.contains("選択") ||
+           startTime0.contains("選択") ||
+           endDate.contains("選択") ||
+           endTime0.contains("選択")) {
             return new BaseResponse<HolidayAcquireRes>(RtnCode.INPUT_EMPTY_ERROR.getCode(), RtnCode.INPUT_EMPTY_ERROR.getMessage(), null);
         }
 //      時間の分離
