@@ -1,30 +1,29 @@
 package com.example.okHttp_demo.vo;
 
-import com.example.okHttp_demo.entity.WorkRelationsInfo;
+import com.example.okHttp_demo.entity.WorkSpotInfo;
 
 import java.util.List;
 
 public class SearchBelongWorkSpotRes {
 
-    private List<WorkRelationsInfo> workRelationsInfo;
+    private List<WorkSpotInfo> workSpotInfo;
 
-    public List<WorkRelationsInfo> getWorkRelationsInfo() {
-        return workRelationsInfo;
+    public List<WorkSpotInfo> getWorkSpotInfo() {
+        return workSpotInfo;
     }
 
-    public void setWorkRelationsInfo(List<WorkRelationsInfo> workRelationsInfo) {
-        this.workRelationsInfo = workRelationsInfo;
-    }
-
-    public SearchBelongWorkSpotRes(List<WorkRelationsInfo> workRelationsInfo) {
-        super();
-        this.workRelationsInfo = workRelationsInfo;
+    public void setWorkSpotInfo(List<WorkSpotInfo> workSpotInfo) {
+        this.workSpotInfo = workSpotInfo;
     }
 
     public SearchBelongWorkSpotRes() {
         super();
         // TODO Auto-generated constructor stub
     }
-    
+
+    public SearchBelongWorkSpotRes(List<WorkSpotInfo> workSpotInfo) {
+        super();
+        this.workSpotInfo = workSpotInfo;
+    }
     
 }

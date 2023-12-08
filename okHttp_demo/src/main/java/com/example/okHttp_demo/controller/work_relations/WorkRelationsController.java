@@ -1,7 +1,7 @@
 package com.example.okHttp_demo.controller.work_relations;
 
 import com.example.okHttp_demo.constants.RtnCode;
-import com.example.okHttp_demo.entity.WorkRelationsInfo;
+import com.example.okHttp_demo.entity.WorkSpotInfo;
 import com.example.okHttp_demo.service.work_relations.WorkRelationsSevice;
 import com.example.okHttp_demo.vo.BaseResponse;
 import com.example.okHttp_demo.vo.SearchBelongWorkSpotReq;
@@ -25,13 +25,13 @@ public class WorkRelationsController {
     public BaseResponse<SearchBelongWorkSpotRes> SearchBelongWorkSpot(@RequestBody SearchBelongWorkSpotReq req)
     {
         
-        List<WorkRelationsInfo> res0 = wService.SearchBelongWorkSpot(req.getPersonalNo());
+        List<WorkSpotInfo> res0 = wService.SearchBelongWorkSpot(req.getPersonalNo());
         
-        SearchBelongWorkSpotRes res = new SearchBelongWorkSpotRes(res0);
+//        SearchBelongWorkSpotRes res = new SearchBelongWorkSpotRes(res0);
 //        for (WorkRelationsInfo item : res0) {
 //            res.setWorkRelationsInfo(item);
 //        }
-//        SearchBelongWorkSpotRes res = new SearchBelongWorkSpotRes(res0);
+        SearchBelongWorkSpotRes res = new SearchBelongWorkSpotRes(res0);
         
 //        res.setTestStr("123");
         
