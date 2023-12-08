@@ -87,7 +87,7 @@ public class HolidayServiceImpl implements HolidayService{
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public BaseResponse<HolidayAcquireRes> HolidayAcquire(String personalNo, String startDate, String startTime0, String endDate, String endTime0, String leaveType, String reason) {
+    public BaseResponse<HolidayAcquireRes> HolidayAcquire(String personalNo, String[] selectedWorkSpot, String startDate, String startTime0, String endDate, String endTime0, String leaveType, String reason) {
 
         int startYear;
         int startMonth;
@@ -102,6 +102,7 @@ public class HolidayServiceImpl implements HolidayService{
         
 //      入力内容がヌルかの確認
         if(!StringUtils.hasText(personalNo) ||
+           selectedWorkSpot == null ||
            !StringUtils.hasText(startDate) ||
            !StringUtils.hasText(startTime0) ||
            !StringUtils.hasText(endDate) ||
@@ -140,8 +141,6 @@ public class HolidayServiceImpl implements HolidayService{
         }
         
         HolidayAcquire holidayAcquire = new HolidayAcquire();
-//      カレンダーナンバーを設定
-        holidayAcquire.setCalendarNo(this.getCalendarNoSequence());
 //      開始年を設定
         holidayAcquire.setStartYear(String.valueOf(startYear));
 //      開始月を設定
@@ -181,7 +180,6 @@ public class HolidayServiceImpl implements HolidayService{
         holidayAcquire.setRegMonth(String.valueOf(localDate.getMonthValue()));
 //      作成時を設定
         holidayAcquire.setRegDay(String.valueOf(localDate.getDayOfMonth()));
-
 //      更新者を設定
         holidayAcquire.setUptAuthor(personalNo);
 //      更新年を設定
@@ -190,14 +188,24 @@ public class HolidayServiceImpl implements HolidayService{
         holidayAcquire.setUptMonth(String.valueOf(localDate.getMonthValue()));
 //      更新時を設定
         holidayAcquire.setUptDay(String.valueOf(localDate.getDayOfMonth()));
+//      可視化を設定
+        holidayAcquire.setDelFlg("0");
 
-//      休暇申込をデータベースに追加
-        if (hDao.save(holidayAcquire) == null) {
-            return new BaseResponse<HolidayAcquireRes>(RtnCode.INSERT_ERROR.getCode(), RtnCode.INSERT_ERROR.getMessage(), null);
+
+        for(int i = 0;i<selectedWorkSpot.length;i++) {
+//          カレンダーナンバーを設定
+            holidayAcquire.setCalendarNo(this.getCalendarNoSequence());
+            
+            holidayAcquire.setSelectedWorkSpot(selectedWorkSpot[i]); 
+            
+//          休暇申込をデータベースに追加
+            if (hDao.save(holidayAcquire) == null) {
+                return new BaseResponse<HolidayAcquireRes>(RtnCode.INSERT_ERROR.getCode(), RtnCode.INSERT_ERROR.getMessage(), null);
+            }
+
+//          CalendarNoのカンターを更新
+            this.updateCalendarNoSequence();
         }
-        
-//      CalendarNoのカンターを更新
-        this.updateCalendarNoSequence();
         
 //      休暇申込の作成結果を返す
         return new BaseResponse<HolidayAcquireRes>(RtnCode.INSERT_SUCCESSFUL.getCode(), RtnCode.INSERT_SUCCESSFUL.getMessage(), new HolidayAcquireRes(holidayAcquire.getCalendarNo()));

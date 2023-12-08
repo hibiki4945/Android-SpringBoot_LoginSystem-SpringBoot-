@@ -36,6 +36,7 @@ public interface HolidayService {
      * @return 休暇申込の作成結果
      */
     public BaseResponse<HolidayAcquireRes> HolidayAcquire(String personalNo, 
+                                                          String[] selectedWorkSpot, 
                                                           String startDate,  
                                                           String startTime,  
                                                           String endDate,  

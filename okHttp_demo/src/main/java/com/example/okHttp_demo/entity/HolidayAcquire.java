@@ -1,5 +1,6 @@
 package com.example.okHttp_demo.entity;
 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,6 +13,9 @@ public class HolidayAcquire {
     @Id
     @Column(name = "CALENDAR_NO")
     private String calendarNo;
+    
+    @Column(name = "SELECTED_WORK_SPOT")
+    private String selectedWorkSpot;
     
     @Column(name = "START_YEAR")
     private String startYear;
@@ -88,6 +92,14 @@ public class HolidayAcquire {
 
     public void setCalendarNo(String calendarNo) {
         this.calendarNo = calendarNo;
+    }
+
+    public String getSelectedWorkSpot() {
+        return selectedWorkSpot;
+    }
+
+    public void setSelectedWorkSpot(String selectedWorkSpot) {
+        this.selectedWorkSpot = selectedWorkSpot;
     }
 
     public String getStartYear() {
@@ -279,11 +291,12 @@ public class HolidayAcquire {
         // TODO Auto-generated constructor stub
     }
 
-    public HolidayAcquire(String calendarNo, String startYear, String startMonth, String startDay, String startTime, String endYear, String endMonth, String endDay, String endTime,
-            int vacationDays, String vacationNo, String reason, String approvalCtg, String refusal, String comment, String regYear, String regMonth, String regDay,
-            String regAuthor, String uptYear, String uptMonth, String uptDay, String uptAuthor, String delFlg) {
+    public HolidayAcquire(String calendarNo, String selectedWorkSpot, String startYear, String startMonth, String startDay, String startTime, String endYear, String endMonth,
+            String endDay, String endTime, int vacationDays, String vacationNo, String reason, String approvalCtg, String refusal, String comment, String regYear, String regMonth,
+            String regDay, String regAuthor, String uptYear, String uptMonth, String uptDay, String uptAuthor, String delFlg) {
         super();
         this.calendarNo = calendarNo;
+        this.selectedWorkSpot = selectedWorkSpot;
         this.startYear = startYear;
         this.startMonth = startMonth;
         this.startDay = startDay;

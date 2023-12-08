@@ -4,6 +4,8 @@ public class HolidayAcquireReq {
 
     private String personalNo;
     
+    private String[] selectedWorkSpot;
+    
     private String startDate;
     
     private String startTime;
@@ -22,6 +24,14 @@ public class HolidayAcquireReq {
 
     public void setPersonalNo(String personalNo) {
         this.personalNo = personalNo;
+    }
+
+    public String[] getSelectedWorkSpot() {
+        return selectedWorkSpot;
+    }
+
+    public void setSelectedWorkSpot(String[] selectedWorkSpot) {
+        this.selectedWorkSpot = selectedWorkSpot;
     }
 
     public String getStartDate() {
@@ -71,5 +81,5 @@ public class HolidayAcquireReq {
     public void setReason(String reason) {
         this.reason = reason;
     }
-    
+
 }
