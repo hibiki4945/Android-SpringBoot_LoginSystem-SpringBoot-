@@ -3,8 +3,10 @@ package com.example.okHttp_demo.service.holiday;
 import com.example.okHttp_demo.constants.RtnCode;
 import com.example.okHttp_demo.dao.HolidayAcuireDao;
 import com.example.okHttp_demo.dao.HolidayAcuireSequenceDao;
+import com.example.okHttp_demo.dao.UserDao;
 import com.example.okHttp_demo.entity.HolidayAcquire;
 import com.example.okHttp_demo.entity.HolidayAcquireSequence;
+import com.example.okHttp_demo.entity.User;
 import com.example.okHttp_demo.vo.BaseResponse;
 import com.example.okHttp_demo.vo.HolidayAcquireRes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.util.StringUtils;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class HolidayServiceImpl implements HolidayService{
@@ -24,6 +27,9 @@ public class HolidayServiceImpl implements HolidayService{
     
     @Autowired
     private HolidayAcuireSequenceDao hsDao;
+    
+    @Autowired
+    private UserDao uDao;
     
     /**
      * カレンダーナンバーの採番を取得する。 作成者:許智偉
@@ -99,10 +105,10 @@ public class HolidayServiceImpl implements HolidayService{
         int endDay;
         int endTime;
         String endTimeSave;
+        boolean manageFlag=false;
         
 //      入力内容がヌルかの確認
         if(!StringUtils.hasText(personalNo) ||
-           selectedWorkSpot == null ||
            !StringUtils.hasText(startDate) ||
            !StringUtils.hasText(startTime0) ||
            !StringUtils.hasText(endDate) ||
@@ -114,6 +120,15 @@ public class HolidayServiceImpl implements HolidayService{
            endDate.contains("選択") ||
            endTime0.contains("選択")) {
             return new BaseResponse<HolidayAcquireRes>(RtnCode.INPUT_EMPTY_ERROR.getCode(), RtnCode.INPUT_EMPTY_ERROR.getMessage(), null);
+        }
+        Optional<User> findPersonalNo0 = uDao.findById(personalNo);
+        User findPersonalNo = findPersonalNo0.get();
+//      入力内容がヌルかの確認
+        if(selectedWorkSpot == null) {
+            if(!findPersonalNo.getAppAuthority().matches("2"))
+                return new BaseResponse<HolidayAcquireRes>(RtnCode.INPUT_EMPTY_ERROR.getCode(), RtnCode.INPUT_EMPTY_ERROR.getMessage(), null);
+            else
+                manageFlag = true;
         }
 //      時間の分離
         String[] startDateNew = startDate.split("-");
@@ -191,12 +206,31 @@ public class HolidayServiceImpl implements HolidayService{
 //      可視化を設定
         holidayAcquire.setDelFlg("0");
 
+        if(!manageFlag) {
+            for(int i = 0;i<selectedWorkSpot.length;i++) {
+//              カレンダーナンバーを設定
+                holidayAcquire.setCalendarNo(this.getCalendarNoSequence());
+                
+                holidayAcquire.setSelectedWorkSpot(selectedWorkSpot[i]); 
+                
+                holidayAcquire.setApprovalCtg("1");//現場審查中
+                
+//              休暇申込をデータベースに追加
+                if (hDao.save(holidayAcquire) == null) {
+                    return new BaseResponse<HolidayAcquireRes>(RtnCode.INSERT_ERROR.getCode(), RtnCode.INSERT_ERROR.getMessage(), null);
+                }
 
-        for(int i = 0;i<selectedWorkSpot.length;i++) {
+//              CalendarNoのカンターを更新
+                this.updateCalendarNoSequence();
+            }
+   
+        }
+        else {
+            
 //          カレンダーナンバーを設定
             holidayAcquire.setCalendarNo(this.getCalendarNoSequence());
-            
-            holidayAcquire.setSelectedWorkSpot(selectedWorkSpot[i]); 
+
+            holidayAcquire.setApprovalCtg("2");//本社審查中
             
 //          休暇申込をデータベースに追加
             if (hDao.save(holidayAcquire) == null) {
@@ -205,7 +239,9 @@ public class HolidayServiceImpl implements HolidayService{
 
 //          CalendarNoのカンターを更新
             this.updateCalendarNoSequence();
+            
         }
+        
         
 //      休暇申込の作成結果を返す
         return new BaseResponse<HolidayAcquireRes>(RtnCode.INSERT_SUCCESSFUL.getCode(), RtnCode.INSERT_SUCCESSFUL.getMessage(), new HolidayAcquireRes(holidayAcquire.getCalendarNo()));
