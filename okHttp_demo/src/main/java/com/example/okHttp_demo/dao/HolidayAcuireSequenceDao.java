@@ -7,6 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 作成者:許智偉 日付 2023/12/8
+ */
 public interface HolidayAcuireSequenceDao extends JpaRepository<HolidayAcquireSequence, Integer>{
 
     // カンターを更新する

@@ -18,18 +18,26 @@ public class WorkRelationsSeviceImpl implements WorkRelationsSevice{
     
     @Autowired
     private WorkSpotInfoDao wsDao;
-    
+
+    /**
+     * 社員番号で担当現場を検索する。 作成者:許智偉
+     *
+     * @param personalNo 社員番号
+     * @return 担当現場
+     */
     @Override
     public List<WorkSpotInfo> SearchBelongWorkSpot(String personalNo) {
         
+//      担当現場の勤務場所番号を検索
         List<WorkRelationsInfo> res0 = wDao.findByWorkSpotDepart(personalNo);
         
         List<WorkSpotInfo> res = new ArrayList<>();
-        
+//      勤務場所番号で勤務場所情報を検索
         for (WorkRelationsInfo item : res0) {
             res.add(wsDao.findByWorkSpotNo(item.getWorkSpotNo()));
         }
         
+//      担当現場を返す
         return res;
     }
     

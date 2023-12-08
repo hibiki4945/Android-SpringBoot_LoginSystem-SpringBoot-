@@ -123,7 +123,7 @@ public class HolidayServiceImpl implements HolidayService{
         }
         Optional<User> findPersonalNo0 = uDao.findById(personalNo);
         User findPersonalNo = findPersonalNo0.get();
-//      入力内容がヌルかの確認
+//      社員か現場リーダーの判断
         if(selectedWorkSpot == null) {
             if(!findPersonalNo.getAppAuthority().matches("2"))
                 return new BaseResponse<HolidayAcquireRes>(RtnCode.INPUT_EMPTY_ERROR.getCode(), RtnCode.INPUT_EMPTY_ERROR.getMessage(), null);
@@ -206,14 +206,14 @@ public class HolidayServiceImpl implements HolidayService{
 //      可視化を設定
         holidayAcquire.setDelFlg("0");
 
-        if(!manageFlag) {
+        if(!manageFlag) { // 社員の場合
             for(int i = 0;i<selectedWorkSpot.length;i++) {
 //              カレンダーナンバーを設定
                 holidayAcquire.setCalendarNo(this.getCalendarNoSequence());
-                
+//              選択現場を設定
                 holidayAcquire.setSelectedWorkSpot(selectedWorkSpot[i]); 
-                
-                holidayAcquire.setApprovalCtg("1");//現場審查中
+//              承認区分を設定(現場審査中)
+                holidayAcquire.setApprovalCtg("1");
                 
 //              休暇申込をデータベースに追加
                 if (hDao.save(holidayAcquire) == null) {
@@ -225,12 +225,12 @@ public class HolidayServiceImpl implements HolidayService{
             }
    
         }
-        else {
+        else { // 現場リーダーの場合
             
 //          カレンダーナンバーを設定
             holidayAcquire.setCalendarNo(this.getCalendarNoSequence());
-
-            holidayAcquire.setApprovalCtg("2");//本社審查中
+//          承認区分を設定(本社審查中)
+            holidayAcquire.setApprovalCtg("2");
             
 //          休暇申込をデータベースに追加
             if (hDao.save(holidayAcquire) == null) {

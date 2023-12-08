@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * 作成者:許智偉
+ * 日付 2023/12/8
+ */
 @RestController
 @RequestMapping("user")
 public class WorkRelationsController {
@@ -21,20 +25,22 @@ public class WorkRelationsController {
     @Autowired
     private WorkRelationsSevice wService;
 
+    /**
+     * 自分の担当現場を検索する。
+     * 作成者:許智偉
+     *
+     * @param req  検索に必要なデータ
+     * @return 自分の担当現場
+     */
     @PostMapping("/search_belong_work_spot")
     public BaseResponse<SearchBelongWorkSpotRes> SearchBelongWorkSpot(@RequestBody SearchBelongWorkSpotReq req)
     {
-        
+//      自分の担当現場を検索
         List<WorkSpotInfo> res0 = wService.SearchBelongWorkSpot(req.getPersonalNo());
-        
-//        SearchBelongWorkSpotRes res = new SearchBelongWorkSpotRes(res0);
-//        for (WorkRelationsInfo item : res0) {
-//            res.setWorkRelationsInfo(item);
-//        }
+//      検索結果の処理
         SearchBelongWorkSpotRes res = new SearchBelongWorkSpotRes(res0);
         
-//        res.setTestStr("123");
-        
+//      自分の担当現場を返す
         return new BaseResponse<SearchBelongWorkSpotRes>(RtnCode.INSERT_SUCCESSFUL.getCode(),RtnCode.INSERT_SUCCESSFUL.getMessage(), res);
     }
     
