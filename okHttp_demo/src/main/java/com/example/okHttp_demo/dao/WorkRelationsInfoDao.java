@@ -13,4 +13,6 @@ public interface WorkRelationsInfoDao extends JpaRepository<WorkRelationsInfo, I
 //  社員番号で勤務関係情報を検索
     public List<WorkRelationsInfo> findByWorkSpotDepart(String personalNo);
     
+    public List<WorkRelationsInfo> findByWorkSpotLeader(String personalNo);
+    
 }

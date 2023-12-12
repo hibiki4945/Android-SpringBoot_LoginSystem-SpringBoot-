@@ -16,8 +16,8 @@ public class WorkRelationsInfo {
     @Column(name = "WORK_SPOT_NO") 
     private String workSpotNo;
     
-    @Column(name = "WORK_SPOT_COM_NM") 
-    private String workSpotComNm;
+    @Column(name = "WORK_SPOT_LEADER") 
+    private String workSpotLeader;
     
     @Column(name = "WORK_SPOT_DEPART") 
     private String workSpotDepart;
@@ -68,12 +68,12 @@ public class WorkRelationsInfo {
         this.workSpotNo = workSpotNo;
     }
 
-    public String getWorkSpotComNm() {
-        return workSpotComNm;
+    public String getWorkSpotLeader() {
+        return workSpotLeader;
     }
 
-    public void setWorkSpotComNm(String workSpotComNm) {
-        this.workSpotComNm = workSpotComNm;
+    public void setWorkSpotLeader(String workSpotLeader) {
+        this.workSpotLeader = workSpotLeader;
     }
 
     public String getWorkSpotDepart() {
@@ -169,12 +169,12 @@ public class WorkRelationsInfo {
         // TODO Auto-generated constructor stub
     }
 
-    public WorkRelationsInfo(int workRelationsNo, String workSpotNo, String workSpotComNm, String workSpotDepart, String workSpot, String regYear, String regMonth, String regDay,
+    public WorkRelationsInfo(int workRelationsNo, String workSpotNo, String workSpotLeader, String workSpotDepart, String workSpot, String regYear, String regMonth, String regDay,
             String regAuthor, String uptYear, String uptMonth, String uptDay, String uptAuthor, String delFlg) {
         super();
         this.workRelationsNo = workRelationsNo;
         this.workSpotNo = workSpotNo;
-        this.workSpotComNm = workSpotComNm;
+        this.workSpotLeader = workSpotLeader;
         this.workSpotDepart = workSpotDepart;
         this.workSpot = workSpot;
         this.regYear = regYear;
@@ -187,5 +187,5 @@ public class WorkRelationsInfo {
         this.uptAuthor = uptAuthor;
         this.delFlg = delFlg;
     }
-    
+
 }
