@@ -39,7 +39,7 @@ public class ReviewServiceImpl implements ReviewService{
         List<WorkRelationsInfo> workRelationList = wDao.findByWorkSpotLeader(personalNo);
         
         List<WorkSpotInfo> workSpotList = new ArrayList<>();
-        WorkSpotInfo workSpotTemp  = new WorkSpotInfo();
+        WorkSpotInfo workSpotTemp  = new WorkSpotInfo(); 
         
 //      workSpotList裡面是 該領導負責的現場
         for (WorkRelationsInfo item : workRelationList) {
