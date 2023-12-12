@@ -65,10 +65,36 @@ public class ReviewServiceImpl implements ReviewService{
             findAllHolidayAcquire.addAll(findHolidayAcquire);
         }
         
-        System.out.println("findAllHolidayAcquire: "+findAllHolidayAcquire);
+//        System.out.println("findAllHolidayAcquire: "+findAllHolidayAcquire);
         
         return new BaseResponse<List<HolidayAcquire>>(RtnCode.SEARCHING_SUCCESSFUL.getCode(), RtnCode.SEARCHING_SUCCESSFUL.getMessage(), findAllHolidayAcquire);
         
+    }
+
+    @Override
+    public BaseResponse<String> HolidayReviewAccept(String calendarNo) {
+        
+        HolidayAcquire res = hDao.findById(calendarNo).get();
+        
+        res.setApprovalCtg("2");
+        
+        hDao.save(res);
+        
+        return new BaseResponse<String>(RtnCode.SEARCHING_SUCCESSFUL.getCode(), RtnCode.SEARCHING_SUCCESSFUL.getMessage(), calendarNo);
+    }
+
+    @Override
+    public BaseResponse<String> HolidayReviewDenied(String calendarNo, String refusal) {
+
+        HolidayAcquire res = hDao.findById(calendarNo).get();
+        
+        res.setRefusal(refusal);
+        
+        res.setApprovalCtg("2");
+        
+        hDao.save(res);
+        
+        return new BaseResponse<String>(RtnCode.SEARCHING_SUCCESSFUL.getCode(), RtnCode.SEARCHING_SUCCESSFUL.getMessage(), calendarNo);
     }
     
 }
