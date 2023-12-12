@@ -62,7 +62,7 @@ public class ReviewServiceImpl implements ReviewService{
             findHolidayAcquire = hDao.findByRegAuthorAndSelectedWorkSpotAndApprovalCtg(item[0], item[1], "1");
 //            findHolidayAcquire = hDao.findByRegAuthorAndSelectedWorkSpot(item[0], item[1]);
             
-            findAllHolidayAcquire.addAll(findHolidayAcquire);
+            findAllHolidayAcquire.addAll(findHolidayAcquire); 
         }
         
 //        System.out.println("findAllHolidayAcquire: "+findAllHolidayAcquire);
