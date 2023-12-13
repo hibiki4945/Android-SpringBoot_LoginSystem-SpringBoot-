@@ -12,7 +12,7 @@ public class HolidayAcquire {
     
     @Id
     @Column(name = "HOLIDAY_ACQUIRE_NO")
-    private String holidayAcquireNo;
+    private String holidayAcquireNo; 
     
     @Column(name = "SELECTED_WORK_SPOT")
     private String selectedWorkSpot;
