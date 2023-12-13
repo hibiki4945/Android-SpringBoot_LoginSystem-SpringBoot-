@@ -15,4 +15,6 @@ public interface HolidayAcuireDao extends JpaRepository<HolidayAcquire, String>{
     
     public List<HolidayAcquire> findByRegAuthorAndSelectedWorkSpotAndApprovalCtg(String regAuthor, String SelectedWorkSpot, String approvalCtg);
     
+    public List<HolidayAcquire> findByApprovalCtg(String approvalCtg);
+    
 }
