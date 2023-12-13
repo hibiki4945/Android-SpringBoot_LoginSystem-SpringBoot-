@@ -11,8 +11,8 @@ import javax.persistence.Table;
 public class HolidayAcquire {
     
     @Id
-    @Column(name = "CALENDAR_NO")
-    private String calendarNo;
+    @Column(name = "HOLIDAY_ACQUIRE_NO")
+    private String holidayAcquireNo;
     
     @Column(name = "SELECTED_WORK_SPOT")
     private String selectedWorkSpot;
@@ -86,12 +86,12 @@ public class HolidayAcquire {
     @Column(name = "DEL_FLG")
     private String delFlg;
 
-    public String getCalendarNo() {
-        return calendarNo;
+    public String getHolidayAcquireNo() {
+        return holidayAcquireNo;
     }
 
-    public void setCalendarNo(String calendarNo) {
-        this.calendarNo = calendarNo;
+    public void setHolidayAcquireNo(String holidayAcquireNo) {
+        this.holidayAcquireNo = holidayAcquireNo;
     }
 
     public String getSelectedWorkSpot() {
@@ -291,11 +291,11 @@ public class HolidayAcquire {
         // TODO Auto-generated constructor stub
     }
 
-    public HolidayAcquire(String calendarNo, String selectedWorkSpot, String startYear, String startMonth, String startDay, String startTime, String endYear, String endMonth,
+    public HolidayAcquire(String holidayAcquireNo, String selectedWorkSpot, String startYear, String startMonth, String startDay, String startTime, String endYear, String endMonth,
             String endDay, String endTime, int vacationDays, String vacationNo, String reason, String approvalCtg, String refusal, String comment, String regYear, String regMonth,
             String regDay, String regAuthor, String uptYear, String uptMonth, String uptDay, String uptAuthor, String delFlg) {
         super();
-        this.calendarNo = calendarNo;
+        this.holidayAcquireNo = holidayAcquireNo;
         this.selectedWorkSpot = selectedWorkSpot;
         this.startYear = startYear;
         this.startMonth = startMonth;

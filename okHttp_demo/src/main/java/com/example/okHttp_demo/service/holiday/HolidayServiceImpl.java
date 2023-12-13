@@ -208,8 +208,8 @@ public class HolidayServiceImpl implements HolidayService{
 
         if(!manageFlag) { // 社員の場合
             for(int i = 0;i<selectedWorkSpot.length;i++) {
-//              カレンダーナンバーを設定
-                holidayAcquire.setCalendarNo(this.getCalendarNoSequence());
+//              休暇申込の採番を設定
+                holidayAcquire.setHolidayAcquireNo(this.getCalendarNoSequence());
 //              選択現場を設定
                 holidayAcquire.setSelectedWorkSpot(selectedWorkSpot[i]); 
 //              承認区分を設定(現場審査中)
@@ -227,8 +227,8 @@ public class HolidayServiceImpl implements HolidayService{
         }
         else { // 現場リーダーの場合
             
-//          カレンダーナンバーを設定
-            holidayAcquire.setCalendarNo(this.getCalendarNoSequence());
+//          休暇申込の採番を設定
+            holidayAcquire.setHolidayAcquireNo(this.getCalendarNoSequence());
 //          承認区分を設定(本社審查中)
             holidayAcquire.setApprovalCtg("2");
             
@@ -244,7 +244,7 @@ public class HolidayServiceImpl implements HolidayService{
         
         
 //      休暇申込の作成結果を返す
-        return new BaseResponse<HolidayAcquireRes>(RtnCode.INSERT_SUCCESSFUL.getCode(), RtnCode.INSERT_SUCCESSFUL.getMessage(), new HolidayAcquireRes(holidayAcquire.getCalendarNo()));
+        return new BaseResponse<HolidayAcquireRes>(RtnCode.INSERT_SUCCESSFUL.getCode(), RtnCode.INSERT_SUCCESSFUL.getMessage(), new HolidayAcquireRes(holidayAcquire.getHolidayAcquireNo()));
     }
 
 
