@@ -14,6 +14,9 @@ public class HolidayAcquire {
     @Column(name = "HOLIDAY_ACQUIRE_NO")
     private String holidayAcquireNo; 
     
+    @Column(name = "WORK_SPOT_DEPART")
+    private String workSpotDepart; 
+    
     @Column(name = "SELECTED_WORK_SPOT")
     private String selectedWorkSpot;
     
@@ -92,6 +95,14 @@ public class HolidayAcquire {
 
     public void setHolidayAcquireNo(String holidayAcquireNo) {
         this.holidayAcquireNo = holidayAcquireNo;
+    }
+
+    public String getWorkSpotDepart() {
+        return workSpotDepart;
+    }
+
+    public void setWorkSpotDepart(String workSpotDepart) {
+        this.workSpotDepart = workSpotDepart;
     }
 
     public String getSelectedWorkSpot() {
@@ -291,11 +302,12 @@ public class HolidayAcquire {
         // TODO Auto-generated constructor stub
     }
 
-    public HolidayAcquire(String holidayAcquireNo, String selectedWorkSpot, String startYear, String startMonth, String startDay, String startTime, String endYear, String endMonth,
-            String endDay, String endTime, int vacationDays, String vacationNo, String reason, String approvalCtg, String refusal, String comment, String regYear, String regMonth,
-            String regDay, String regAuthor, String uptYear, String uptMonth, String uptDay, String uptAuthor, String delFlg) {
+    public HolidayAcquire(String holidayAcquireNo, String workSpotDepart, String selectedWorkSpot, String startYear, String startMonth, String startDay, String startTime,
+            String endYear, String endMonth, String endDay, String endTime, int vacationDays, String vacationNo, String reason, String approvalCtg, String refusal, String comment,
+            String regYear, String regMonth, String regDay, String regAuthor, String uptYear, String uptMonth, String uptDay, String uptAuthor, String delFlg) {
         super();
         this.holidayAcquireNo = holidayAcquireNo;
+        this.workSpotDepart = workSpotDepart;
         this.selectedWorkSpot = selectedWorkSpot;
         this.startYear = startYear;
         this.startMonth = startMonth;

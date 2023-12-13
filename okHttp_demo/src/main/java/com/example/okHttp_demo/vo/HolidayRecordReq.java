@@ -2,14 +2,14 @@ package com.example.okHttp_demo.vo;
 
 public class HolidayRecordReq {
 
-    private String regAuthor;
+    private String workSpotDepart;
 
-    public String getRegAuthor() {
-        return regAuthor;
+    public String getWorkSpotDepart() {
+        return workSpotDepart;
     }
 
-    public void setRegAuthor(String regAuthor) {
-        this.regAuthor = regAuthor;
+    public void setWorkSpotDepart(String workSpotDepart) {
+        this.workSpotDepart = workSpotDepart;
     }
-    
+
 }

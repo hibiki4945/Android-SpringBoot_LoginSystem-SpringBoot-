@@ -185,6 +185,8 @@ public class HolidayServiceImpl implements HolidayService{
             holidayAcquire.setVacationNo("14");
 //      休暇理由を設定
         holidayAcquire.setReason(reason);
+//      社員番号を設定
+        holidayAcquire.setWorkSpotDepart(personalNo);
 //      作成者を設定
         holidayAcquire.setRegAuthor(personalNo);
 //      現在時刻を取得

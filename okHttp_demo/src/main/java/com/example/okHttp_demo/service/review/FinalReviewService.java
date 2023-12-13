@@ -22,18 +22,18 @@ public interface FinalReviewService {
      * 現場審査完了の休暇申込を承認
      * 作成者:許智偉
      *
-     * @param calendarNo 休暇申込の採番
+     * @param workSpotDepart 休暇申込の採番
      * @return 本社審査完了の休暇申込の社員番号
      */
-    public BaseResponse<String> HolidayFinalReviewAccept(String calendarNo);
+    public BaseResponse<String> HolidayFinalReviewAccept(String workSpotDepart);
 
     /**
      * 現場審査完了の休暇申込を却下
      * 作成者:許智偉
      *
-     * @param calendarNo 休暇申込の採番
+     * @param workSpotDepart 休暇申込の採番
      * @return 本社審査完了の休暇申込の社員番号
      */
-    public BaseResponse<String> HolidayFinalReviewDenied(String calendarNo);
+    public BaseResponse<String> HolidayFinalReviewDenied(String workSpotDepart);
     
 }

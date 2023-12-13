@@ -11,9 +11,9 @@ import java.util.List;
 public interface HolidayAcuireDao extends JpaRepository<HolidayAcquire, String>{
     
 //  作成者で休暇申込を検索
-    public List<HolidayAcquire> findByRegAuthor(String regAuthor);
+    public List<HolidayAcquire> findByWorkSpotDepart(String workSpotDepart);
     
-    public List<HolidayAcquire> findByRegAuthorAndSelectedWorkSpotAndApprovalCtg(String regAuthor, String SelectedWorkSpot, String approvalCtg);
+    public List<HolidayAcquire> findByWorkSpotDepartAndSelectedWorkSpotAndApprovalCtg(String workSpotDepart, String SelectedWorkSpot, String approvalCtg);
     
     public List<HolidayAcquire> findByApprovalCtg(String approvalCtg);
     

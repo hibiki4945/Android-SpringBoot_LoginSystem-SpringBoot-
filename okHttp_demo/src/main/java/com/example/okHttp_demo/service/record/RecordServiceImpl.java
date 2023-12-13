@@ -26,7 +26,7 @@ public class RecordServiceImpl implements RecordService{
     public BaseResponse<List<HolidayAcquire>> RecordShow(HolidayRecordReq req) {
         
 //      自分の休暇申込を検索
-        List<HolidayAcquire> res = hDao.findByRegAuthor(req.getRegAuthor());
+        List<HolidayAcquire> res = hDao.findByWorkSpotDepart(req.getWorkSpotDepart());
 
 //      休暇申込の検索結果を返す
         return new BaseResponse<List<HolidayAcquire>>(RtnCode.SEARCHING_SUCCESSFUL.getCode(), RtnCode.SEARCHING_SUCCESSFUL.getMessage(), res);

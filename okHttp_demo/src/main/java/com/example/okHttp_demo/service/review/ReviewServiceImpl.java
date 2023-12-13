@@ -71,7 +71,7 @@ public class ReviewServiceImpl implements ReviewService{
         
         for (String[] item : searchConditionList) {
 //          当社員番号と当現場と現場審査中の休暇申込を検索
-            findHolidayAcquire = hDao.findByRegAuthorAndSelectedWorkSpotAndApprovalCtg(item[0], item[1], "1");
+            findHolidayAcquire = hDao.findByWorkSpotDepartAndSelectedWorkSpotAndApprovalCtg(item[0], item[1], "1");
 
             findAllHolidayAcquire.addAll(findHolidayAcquire); 
         }
@@ -84,32 +84,33 @@ public class ReviewServiceImpl implements ReviewService{
      * 自分の部下の休暇申込を承認
      * 作成者:許智偉
      *
-     * @param calendarNo 休暇申込の採番
+     * @param workSpotDepart 休暇申込の採番
      * @return 自分の部下の社員番号
      */
     @Override
-    public BaseResponse<String> HolidayReviewAccept(String calendarNo) {
+    public BaseResponse<String> HolidayReviewAccept(String workSpotDepart) {
 //      休暇申込の採番で休暇申込を検索
-        HolidayAcquire res = hDao.findById(calendarNo).get();
+        HolidayAcquire res = hDao.findById(workSpotDepart).get();
 //      承認区分を本社審査中と設定
         res.setApprovalCtg("2");
 //      休暇申込を更新
         hDao.save(res);
         
-        return new BaseResponse<String>(RtnCode.SEARCHING_SUCCESSFUL.getCode(), RtnCode.SEARCHING_SUCCESSFUL.getMessage(), calendarNo);
+        return new BaseResponse<String>(RtnCode.SEARCHING_SUCCESSFUL.getCode(), RtnCode.SEARCHING_SUCCESSFUL.getMessage(), workSpotDepart);
     }
 
     /**
      * 自分の部下の休暇申込を却下
      * 作成者:許智偉
      *
-     * @param calendarNo 休暇申込の採番
+     * @param workSpotDepart 休暇申込の採番
+     * @param refusal 却下理由
      * @return 自分の部下の社員番号
      */
     @Override
-    public BaseResponse<String> HolidayReviewDenied(String calendarNo, String refusal) {
+    public BaseResponse<String> HolidayReviewDenied(String workSpotDepart, String refusal) {
 //      休暇申込の採番で休暇申込を検索
-        HolidayAcquire res = hDao.findById(calendarNo).get();
+        HolidayAcquire res = hDao.findById(workSpotDepart).get();
 //      却下理由を設定
         res.setRefusal(refusal);
 //      承認区分を本社審査中と設定
@@ -117,7 +118,7 @@ public class ReviewServiceImpl implements ReviewService{
 //      休暇申込を更新
         hDao.save(res);
         
-        return new BaseResponse<String>(RtnCode.SEARCHING_SUCCESSFUL.getCode(), RtnCode.SEARCHING_SUCCESSFUL.getMessage(), calendarNo);
+        return new BaseResponse<String>(RtnCode.SEARCHING_SUCCESSFUL.getCode(), RtnCode.SEARCHING_SUCCESSFUL.getMessage(), workSpotDepart);
     }
     
 }

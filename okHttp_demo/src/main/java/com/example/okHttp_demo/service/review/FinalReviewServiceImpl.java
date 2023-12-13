@@ -36,38 +36,38 @@ public class FinalReviewServiceImpl implements FinalReviewService{
      * 現場審査完了の休暇申込を承認
      * 作成者:許智偉
      *
-     * @param calendarNo 休暇申込の採番
+     * @param workSpotDepart 休暇申込の採番
      * @return 本社審査完了の休暇申込の社員番号
      */
     @Override
-    public BaseResponse<String> HolidayFinalReviewAccept(String calendarNo) {
+    public BaseResponse<String> HolidayFinalReviewAccept(String workSpotDepart) {
 //      休暇申込の採番で休暇申込を検索
-        HolidayAcquire res = hDao.findById(calendarNo).get();
+        HolidayAcquire res = hDao.findById(workSpotDepart).get();
 //      承認区分を確認要と設定
         res.setApprovalCtg("4");
 //      休暇申込を更新
         hDao.save(res);
         
-        return new BaseResponse<String>(RtnCode.SEARCHING_SUCCESSFUL.getCode(), RtnCode.SEARCHING_SUCCESSFUL.getMessage(), calendarNo);
+        return new BaseResponse<String>(RtnCode.SEARCHING_SUCCESSFUL.getCode(), RtnCode.SEARCHING_SUCCESSFUL.getMessage(), workSpotDepart);
     }
 
     /**
      * 現場審査完了の休暇申込を却下
      * 作成者:許智偉
      *
-     * @param calendarNo 休暇申込の採番
+     * @param workSpotDepart 休暇申込の採番
      * @return 本社審査完了の休暇申込の社員番号
      */
     @Override
-    public BaseResponse<String> HolidayFinalReviewDenied(String calendarNo) {
+    public BaseResponse<String> HolidayFinalReviewDenied(String workSpotDepart) {
 //      休暇申込の採番で休暇申込を検索
-        HolidayAcquire res = hDao.findById(calendarNo).get();
+        HolidayAcquire res = hDao.findById(workSpotDepart).get();
 //      承認区分を却下と設定
         res.setApprovalCtg("3");
 //      休暇申込を更新
         hDao.save(res);
         
-        return new BaseResponse<String>(RtnCode.SEARCHING_SUCCESSFUL.getCode(), RtnCode.SEARCHING_SUCCESSFUL.getMessage(), calendarNo);
+        return new BaseResponse<String>(RtnCode.SEARCHING_SUCCESSFUL.getCode(), RtnCode.SEARCHING_SUCCESSFUL.getMessage(), workSpotDepart);
     }
     
 }
