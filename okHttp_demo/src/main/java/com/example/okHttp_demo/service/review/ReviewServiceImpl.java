@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 作成者:許智偉 日付 2023/12/13
+ */
 @Service
 public class ReviewServiceImpl implements ReviewService{
 
@@ -25,7 +28,14 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Autowired
     private HolidayAcuireDao hDao;
-    
+
+    /**
+     * 自分の部下の休暇申込を検索
+     * 作成者:許智偉
+     *
+     * @param personalNo 自分の社員番号
+     * @return 自分の部下の休暇申込
+     */
     @Override
     public BaseResponse<List<HolidayAcquire>> HolidayReview(String personalNo) {
         
@@ -35,18 +45,19 @@ public class ReviewServiceImpl implements ReviewService{
         
         List<String[]> searchConditionList = new ArrayList<>();
         
-//      找部下(記得將自己的資料(做去除))
+//      自分の仕事関係表を検索
         List<WorkRelationsInfo> workRelationList = wDao.findByWorkSpotLeader(personalNo);
         
         List<WorkSpotInfo> workSpotList = new ArrayList<>();
         WorkSpotInfo workSpotTemp  = new WorkSpotInfo(); 
         
-//      workSpotList裡面是 該領導負責的現場
+//      自分の仕事関係表で部下を検索
         for (WorkRelationsInfo item : workRelationList) {
             workSpotTemp = wsDao.findByWorkSpotNo(item.getWorkSpotNo());   
             
-//              searchCondition是 搜尋請假單的條件(記得手動加上(Ctg="1"))
+//          仕事関係表のリーダー番号と社員番号が一致しないを判断
             if(!item.getWorkSpotDepart().matches(personalNo)) {
+//              部下と現場をまとめて保存
                 String[] searchCondition = new String[2];
                 searchCondition[0] = item.getWorkSpotDepart();
                 searchCondition[1] = workSpotTemp.getWorkSpotComNm();
@@ -59,39 +70,51 @@ public class ReviewServiceImpl implements ReviewService{
         List<HolidayAcquire> findHolidayAcquire = new ArrayList<>();
         
         for (String[] item : searchConditionList) {
+//          当社員番号と当現場と現場審査中の休暇申込を検索
             findHolidayAcquire = hDao.findByRegAuthorAndSelectedWorkSpotAndApprovalCtg(item[0], item[1], "1");
-//            findHolidayAcquire = hDao.findByRegAuthorAndSelectedWorkSpot(item[0], item[1]);
-            
+
             findAllHolidayAcquire.addAll(findHolidayAcquire); 
         }
-        
-//        System.out.println("findAllHolidayAcquire: "+findAllHolidayAcquire);
         
         return new BaseResponse<List<HolidayAcquire>>(RtnCode.SEARCHING_SUCCESSFUL.getCode(), RtnCode.SEARCHING_SUCCESSFUL.getMessage(), findAllHolidayAcquire);
         
     }
 
+    /**
+     * 自分の部下の休暇申込を承認
+     * 作成者:許智偉
+     *
+     * @param calendarNo 休暇申込の採番
+     * @return 自分の部下の社員番号
+     */
     @Override
     public BaseResponse<String> HolidayReviewAccept(String calendarNo) {
-        
+//      休暇申込の採番で休暇申込を検索
         HolidayAcquire res = hDao.findById(calendarNo).get();
-        
+//      承認区分を本社審査中と設定
         res.setApprovalCtg("2");
-        
+//      休暇申込を更新
         hDao.save(res);
         
         return new BaseResponse<String>(RtnCode.SEARCHING_SUCCESSFUL.getCode(), RtnCode.SEARCHING_SUCCESSFUL.getMessage(), calendarNo);
     }
 
+    /**
+     * 自分の部下の休暇申込を却下
+     * 作成者:許智偉
+     *
+     * @param calendarNo 休暇申込の採番
+     * @return 自分の部下の社員番号
+     */
     @Override
     public BaseResponse<String> HolidayReviewDenied(String calendarNo, String refusal) {
-
+//      休暇申込の採番で休暇申込を検索
         HolidayAcquire res = hDao.findById(calendarNo).get();
-        
+//      却下理由を設定
         res.setRefusal(refusal);
-        
+//      承認区分を本社審査中と設定
         res.setApprovalCtg("2");
-        
+//      休暇申込を更新
         hDao.save(res);
         
         return new BaseResponse<String>(RtnCode.SEARCHING_SUCCESSFUL.getCode(), RtnCode.SEARCHING_SUCCESSFUL.getMessage(), calendarNo);
