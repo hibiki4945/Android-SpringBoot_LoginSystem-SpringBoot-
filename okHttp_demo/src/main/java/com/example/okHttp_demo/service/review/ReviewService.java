@@ -23,19 +23,19 @@ public interface ReviewService {
      * 自分の部下の休暇申込を承認
      * 作成者:許智偉
      *
-     * @param workSpotDepart 休暇申込の採番
+     * @param holidayAcquireNo 休暇申込の採番
      * @return 自分の部下の社員番号
      */
-    public BaseResponse<String> HolidayReviewAccept(String workSpotDepart);
+    public BaseResponse<String> HolidayReviewAccept(String holidayAcquireNo);
 
     /**
      * 自分の部下の休暇申込を却下
      * 作成者:許智偉
      *
-     * @param workSpotDepart 休暇申込の採番
+     * @param holidayAcquireNo 休暇申込の採番
      * @param refusal 却下理由
      * @return 自分の部下の社員番号
      */
-    public BaseResponse<String> HolidayReviewDenied(String workSpotDepart, String refusal);
+    public BaseResponse<String> HolidayReviewDenied(String holidayAcquireNo, String refusal);
     
 }

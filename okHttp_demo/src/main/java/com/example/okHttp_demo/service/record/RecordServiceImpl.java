@@ -8,6 +8,7 @@ import com.example.okHttp_demo.vo.HolidayRecordReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,8 +27,15 @@ public class RecordServiceImpl implements RecordService{
     public BaseResponse<List<HolidayAcquire>> RecordShow(HolidayRecordReq req) {
         
 //      自分の休暇申込を検索
-        List<HolidayAcquire> res = hDao.findByWorkSpotDepart(req.getWorkSpotDepart());
+        List<HolidayAcquire> res0 = hDao.findByWorkSpotDepart(req.getWorkSpotDepart());
 
+        List<HolidayAcquire> res = new ArrayList<>();
+        for (HolidayAcquire item : res0) {
+            if(item.getApprovalCtg().matches("4") && item.getDelFlg().matches("0")) {
+                res.add(item);
+            }
+        }
+        
 //      休暇申込の検索結果を返す
         return new BaseResponse<List<HolidayAcquire>>(RtnCode.SEARCHING_SUCCESSFUL.getCode(), RtnCode.SEARCHING_SUCCESSFUL.getMessage(), res);
         

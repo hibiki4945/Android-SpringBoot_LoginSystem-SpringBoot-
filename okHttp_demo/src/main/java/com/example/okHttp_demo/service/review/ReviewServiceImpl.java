@@ -71,7 +71,7 @@ public class ReviewServiceImpl implements ReviewService{
         
         for (String[] item : searchConditionList) {
 //          当社員番号と当現場と現場審査中の休暇申込を検索
-            findHolidayAcquire = hDao.findByWorkSpotDepartAndSelectedWorkSpotAndApprovalCtg(item[0], item[1], "1");
+            findHolidayAcquire = hDao.findByWorkSpotDepartAndSelectedWorkSpotAndApprovalCtgAndDelFlg(item[0], item[1], "1", "0");
 
             findAllHolidayAcquire.addAll(findHolidayAcquire); 
         }

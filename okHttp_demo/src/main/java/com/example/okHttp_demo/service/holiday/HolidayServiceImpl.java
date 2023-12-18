@@ -43,7 +43,7 @@ public class HolidayServiceImpl implements HolidayService{
         String localDate = dtf.format(LocalDate.now());
         String yearNow = localDate.substring(0,4);
 //      来年になったら、カンターをゼロに設定
-        if(!hDao.existsById(yearNow+"00")) {
+        if(!hDao.existsById(yearNow+"000")) {
             List<HolidayAcquireSequence> res = hsDao.findAll();
             for (HolidayAcquireSequence item : res) {
                 hsDao.updateById(item.getIdNumber(), 0);
@@ -57,7 +57,7 @@ public class HolidayServiceImpl implements HolidayService{
         }
 
 //      CalendarNoのカンターを返す
-        return String.format(yearNow+"%02d", idNumber);
+        return String.format(yearNow+"%03d", idNumber);
     }
 
     /**

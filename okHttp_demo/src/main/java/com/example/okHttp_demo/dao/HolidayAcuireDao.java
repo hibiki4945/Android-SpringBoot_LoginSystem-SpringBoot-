@@ -10,11 +10,13 @@ import java.util.List;
  */
 public interface HolidayAcuireDao extends JpaRepository<HolidayAcquire, String>{
     
-//  作成者で休暇申込を検索
+//  社員番号で休暇申込を検索
     public List<HolidayAcquire> findByWorkSpotDepart(String workSpotDepart);
-    
-    public List<HolidayAcquire> findByWorkSpotDepartAndSelectedWorkSpotAndApprovalCtg(String workSpotDepart, String SelectedWorkSpot, String approvalCtg);
-    
-    public List<HolidayAcquire> findByApprovalCtg(String approvalCtg);
+//  社員番号と現場と承認区分で休暇申込を検索    
+    public List<HolidayAcquire> findByWorkSpotDepartAndSelectedWorkSpotAndApprovalCtgAndDelFlg(String workSpotDepart, String SelectedWorkSpot, String approvalCtg, String delFlg);
+//  承認区分で休暇申込を検索    
+    public List<HolidayAcquire> findByApprovalCtgAndDelFlg(String approvalCtg, String delFlg);
+   
+    public List<HolidayAcquire> findByWorkSpotDepartAndStartYearAndStartMonthAndStartDayAndStartTime(String workSpotDepart, String startYear, String startMonth, String startDay, String startTime);
     
 }
