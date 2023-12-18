@@ -52,7 +52,7 @@ public class FinalReviewController {
     public BaseResponse<String> HolidayFinalReviewAccept(@RequestBody HolidayReviewAcceptReq req)
     {
 //      現場審査完了の休暇申込を承認
-        BaseResponse<String> res = frService.HolidayFinalReviewAccept(req.getCalendarNo());
+        BaseResponse<String> res = frService.HolidayFinalReviewAccept(req.getPersonalNo(), req.getCalendarNo());
 
 //      本社審査完了の休暇申込の社員番号を返す
         return new BaseResponse<String>(res.getStatus(), res.getMessage(), res.getData());
@@ -69,7 +69,7 @@ public class FinalReviewController {
     public BaseResponse<String> HolidayFinalReviewDenied(@RequestBody HolidayReviewDeniedReq req)
     {
 //      現場審査完了の休暇申込を却下
-        BaseResponse<String> res = frService.HolidayFinalReviewDenied(req.getCalendarNo());
+        BaseResponse<String> res = frService.HolidayFinalReviewDenied(req.getPersonalNo(), req.getCalendarNo());
 
 //      本社審査完了の休暇申込の社員番号を返す
         return new BaseResponse<String>(res.getStatus(), res.getMessage(), res.getData());

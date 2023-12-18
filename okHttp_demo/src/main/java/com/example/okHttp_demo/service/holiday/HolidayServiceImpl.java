@@ -139,19 +139,25 @@ public class HolidayServiceImpl implements HolidayService{
         startYear = Integer.parseInt(startDateNew[0]);
         startMonth = Integer.parseInt(startDateNew[1]);
         startDay = Integer.parseInt(startDateNew[2]);
-        startTime = Integer.parseInt(startTimeNew[0])+Integer.parseInt(startTimeNew[1]);
+        startTime = Integer.parseInt(startTimeNew[0])*100+Integer.parseInt(startTimeNew[1]);
         startTimeSave = startTimeNew[0]+startTimeNew[1];
         endYear = Integer.parseInt(endDateNew[0]);
         endMonth = Integer.parseInt(endDateNew[1]);
         endDay = Integer.parseInt(endDateNew[2]);
-        endTime = Integer.parseInt(endTimeNew[0])+Integer.parseInt(endTimeNew[1]);
+        endTime = Integer.parseInt(endTimeNew[0])*100+Integer.parseInt(endTimeNew[1]);
         endTimeSave = endTimeNew[0]+endTimeNew[1];
 
 //      開始時間が終了時間より先かを確認
-        if(startYear >= endYear &&
-           startMonth >= endMonth &&
-           startDay >= endDay &&
-           startTime >= endTime) {
+        if((startYear > endYear) ||
+           (startYear == endYear &&
+           startMonth > endMonth) || 
+           (startYear == endYear &&
+           startMonth == endMonth &&
+           startDay > endDay) || 
+           (startYear == endYear &&
+           startMonth == endMonth &&
+           startDay == endDay &&
+           startTime >= endTime)) {
             return new BaseResponse<HolidayAcquireRes>(RtnCode.TIME_INTERVAL_ERROR.getCode(), RtnCode.TIME_INTERVAL_ERROR.getMessage(), null);
         }
         

@@ -11,6 +11,7 @@ import com.example.okHttp_demo.vo.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,15 +85,27 @@ public class ReviewServiceImpl implements ReviewService{
      * 自分の部下の休暇申込を承認
      * 作成者:許智偉
      *
+     * @param personalNo 自分の社員番号
      * @param workSpotDepart 休暇申込の採番
      * @return 自分の部下の社員番号
      */
     @Override
-    public BaseResponse<String> HolidayReviewAccept(String workSpotDepart) {
+    public BaseResponse<String> HolidayReviewAccept(String personalNo, String workSpotDepart) {
 //      休暇申込の採番で休暇申込を検索
         HolidayAcquire res = hDao.findById(workSpotDepart).get();
 //      承認区分を本社審査中と設定
         res.setApprovalCtg("2");
+//      現在時刻を取得
+        LocalDate localDate = LocalDate.now();
+//      更新者を設定
+        res.setUptAuthor(personalNo);
+//      更新年を設定
+        res.setUptYear(String.valueOf(localDate.getYear()));
+//      更新月を設定
+        res.setUptMonth(String.valueOf(localDate.getMonthValue()));
+//      更新時を設定
+        res.setUptDay(String.valueOf(localDate.getDayOfMonth()));
+
 //      休暇申込を更新
         hDao.save(res);
         
@@ -103,18 +116,30 @@ public class ReviewServiceImpl implements ReviewService{
      * 自分の部下の休暇申込を却下
      * 作成者:許智偉
      *
+     * @param personalNo 自分の社員番号
      * @param workSpotDepart 休暇申込の採番
      * @param refusal 却下理由
      * @return 自分の部下の社員番号
      */
     @Override
-    public BaseResponse<String> HolidayReviewDenied(String workSpotDepart, String refusal) {
+    public BaseResponse<String> HolidayReviewDenied(String personalNo, String workSpotDepart, String refusal) {
 //      休暇申込の採番で休暇申込を検索
         HolidayAcquire res = hDao.findById(workSpotDepart).get();
 //      却下理由を設定
         res.setRefusal(refusal);
 //      承認区分を本社審査中と設定
         res.setApprovalCtg("2");
+//      現在時刻を取得
+        LocalDate localDate = LocalDate.now();
+//      更新者を設定
+        res.setUptAuthor(personalNo);
+//      更新年を設定
+        res.setUptYear(String.valueOf(localDate.getYear()));
+//      更新月を設定
+        res.setUptMonth(String.valueOf(localDate.getMonthValue()));
+//      更新時を設定
+        res.setUptDay(String.valueOf(localDate.getDayOfMonth()));
+
 //      休暇申込を更新
         hDao.save(res);
         

@@ -2,9 +2,19 @@ package com.example.okHttp_demo.vo;
 
 public class HolidayReviewDeniedReq {
 
+    private String personalNo;
+    
     private String calendarNo;
     
     private String refusal;
+
+    public String getPersonalNo() {
+        return personalNo;
+    }
+
+    public void setPersonalNo(String personalNo) {
+        this.personalNo = personalNo;
+    }
 
     public String getCalendarNo() {
         return calendarNo;
@@ -21,5 +31,5 @@ public class HolidayReviewDeniedReq {
     public void setRefusal(String refusal) {
         this.refusal = refusal;
     }
-    
+
 }
