@@ -34,8 +34,9 @@ public interface FinalReviewService {
      *
      * @param personalNo 自分の社員番号
      * @param holidayAcquireNo 休暇申込の採番
+     * @param refusal 却下理由
      * @return 本社審査完了の休暇申込の社員番号
      */
-    public BaseResponse<String> HolidayFinalReviewDenied(String personalNo, String holidayAcquireNo);
+    public BaseResponse<String> HolidayFinalReviewDenied(String personalNo, String holidayAcquireNo, String refusal);
     
 }

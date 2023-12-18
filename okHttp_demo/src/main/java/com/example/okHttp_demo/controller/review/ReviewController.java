@@ -70,7 +70,7 @@ public class ReviewController {
     public BaseResponse<String> HolidayReviewDenied(@RequestBody HolidayReviewDeniedReq req)
     {
 //      自分の部下の休暇申込を却下する
-        BaseResponse<String> res = rService.HolidayReviewDenied(req.getPersonalNo(), req.getCalendarNo(), req.getRefusal());
+        BaseResponse<String> res = rService.HolidayReviewDenied(req.getPersonalNo(), req.getCalendarNo());
 
 //      自分の部下の社員番号を返す
         return new BaseResponse<String>(res.getStatus(), res.getMessage(), res.getData());

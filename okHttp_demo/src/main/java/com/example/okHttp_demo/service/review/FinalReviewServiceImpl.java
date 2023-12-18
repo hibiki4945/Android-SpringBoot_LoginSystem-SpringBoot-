@@ -61,7 +61,7 @@ public class FinalReviewServiceImpl implements FinalReviewService{
 //      休暇申込を更新
         hDao.save(res);
 
-        //      1. 找到該社員的同開始時間的請假單
+//      当社員の別現場の同じ開始時刻の休暇申込を検索
         String workSpotDepart = res.getWorkSpotDepart();
         String startYear = res.getStartYear();
         String startMonth = res.getStartMonth();
@@ -69,7 +69,7 @@ public class FinalReviewServiceImpl implements FinalReviewService{
         String startTime = res.getStartTime();
         List<HolidayAcquire> other = hDao.findByWorkSpotDepartAndStartYearAndStartMonthAndStartDayAndStartTime(workSpotDepart, startYear, startMonth, startDay, startTime);
 
-        //      2. 除此請假單(res) 都做(Del_Flag="1")
+//      同じ開始時刻の休暇申込を削除
         for (HolidayAcquire item : other) {
             if(!item.getHolidayAcquireNo().matches(holidayAcquireNo)) {
                 item.setDelFlg("1");
@@ -89,9 +89,11 @@ public class FinalReviewServiceImpl implements FinalReviewService{
      * @return 本社審査完了の休暇申込の社員番号
      */
     @Override
-    public BaseResponse<String> HolidayFinalReviewDenied(String personalNo, String holidayAcquireNo) {
+    public BaseResponse<String> HolidayFinalReviewDenied(String personalNo, String holidayAcquireNo, String refusal) {
 //      休暇申込の採番で休暇申込を検索
         HolidayAcquire res = hDao.findById(holidayAcquireNo).get();
+//      却下理由を設定
+        res.setRefusal(refusal);
 //      承認区分を却下と設定
         res.setApprovalCtg("3");
 //      現在時刻を取得
@@ -108,7 +110,7 @@ public class FinalReviewServiceImpl implements FinalReviewService{
 //      休暇申込を更新
         hDao.save(res);
 
-        //      1. 找到該社員的同開始時間的請假單
+//      当社員の別現場の同じ開始時刻の休暇申込を検索
         String workSpotDepart = res.getWorkSpotDepart();
         String startYear = res.getStartYear();
         String startMonth = res.getStartMonth();
@@ -116,7 +118,7 @@ public class FinalReviewServiceImpl implements FinalReviewService{
         String startTime = res.getStartTime();
         List<HolidayAcquire> other = hDao.findByWorkSpotDepartAndStartYearAndStartMonthAndStartDayAndStartTime(workSpotDepart, startYear, startMonth, startDay, startTime);
 
-        //      2. 除此請假單(res) 都做(Del_Flag="1")
+//      同じ開始時刻の休暇申込を削除
         for (HolidayAcquire item : other) {
             if(!item.getHolidayAcquireNo().matches(holidayAcquireNo)) {
                 item.setDelFlg("1");

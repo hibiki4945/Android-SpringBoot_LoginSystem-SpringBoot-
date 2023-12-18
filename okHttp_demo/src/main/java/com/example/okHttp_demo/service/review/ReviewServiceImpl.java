@@ -40,10 +40,6 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public BaseResponse<List<HolidayAcquire>> HolidayReview(String personalNo) {
         
-//        1. 找自己負責的所有現場
-//        2. 找自己的所有部下
-//        3. forEach各現場 用"建立者"+"現場"+"Ctg="1" 找請假單
-        
         List<String[]> searchConditionList = new ArrayList<>();
         
 //      自分の仕事関係表を検索
@@ -118,15 +114,14 @@ public class ReviewServiceImpl implements ReviewService{
      *
      * @param personalNo 自分の社員番号
      * @param workSpotDepart 休暇申込の採番
-     * @param refusal 却下理由
      * @return 自分の部下の社員番号
      */
     @Override
-    public BaseResponse<String> HolidayReviewDenied(String personalNo, String workSpotDepart, String refusal) {
+    public BaseResponse<String> HolidayReviewDenied(String personalNo, String workSpotDepart) {
 //      休暇申込の採番で休暇申込を検索
         HolidayAcquire res = hDao.findById(workSpotDepart).get();
-//      却下理由を設定
-        res.setRefusal(refusal);
+//      却下理由を設定（現場が却下か承認の判断用）
+        res.setRefusal("現場が却下");
 //      承認区分を本社審査中と設定
         res.setApprovalCtg("2");
 //      現在時刻を取得

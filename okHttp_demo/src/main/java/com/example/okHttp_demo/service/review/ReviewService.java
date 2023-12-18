@@ -35,9 +35,8 @@ public interface ReviewService {
      *
      * @param personalNo 自分の社員番号
      * @param holidayAcquireNo 休暇申込の採番
-     * @param refusal 却下理由
      * @return 自分の部下の社員番号
      */
-    public BaseResponse<String> HolidayReviewDenied(String personalNo, String holidayAcquireNo, String refusal);
+    public BaseResponse<String> HolidayReviewDenied(String personalNo, String holidayAcquireNo);
     
 }
