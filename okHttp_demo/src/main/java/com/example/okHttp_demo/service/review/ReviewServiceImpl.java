@@ -126,7 +126,7 @@ public class ReviewServiceImpl implements ReviewService{
         res.setApprovalCtg("2");
 //      現在時刻を取得
         LocalDate localDate = LocalDate.now();
-//      更新者を設定
+//      更新者を設定 
         res.setUptAuthor(personalNo);
 //      更新年を設定
         res.setUptYear(String.valueOf(localDate.getYear()));
