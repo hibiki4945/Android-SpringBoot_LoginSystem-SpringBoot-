@@ -36,7 +36,7 @@ public class HolidayController {
 //      休暇申込をデータベースに追加する
         BaseResponse<HolidayAcquireRes> res = hService.HolidayAcquire(req.getPersonalNo(),req.getSelectedWorkSpot(),req.getStartDate(),req.getStartTime(),req.getEndDate(),req.getEndTime(),req.getLeaveType(),req.getReason());
 //      休暇申込の追加結果を確認
-        if(!res.getStatus().matches("200")) { 
+        if(!res.getStatus().matches("200")) {
             return new BaseResponse<HolidayAcquireRes>(res.getStatus(),res.getMessage(),null);
         }
         

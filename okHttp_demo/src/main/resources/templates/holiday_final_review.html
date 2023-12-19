@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        table, th, td {
+            border: 1px solid black;  /* 添加黑色格线 */
+        }
+
+        th, td {
+            padding: 8px;  /* 可根据需要调整单元格内边距 */
+        }
+        .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0,0,0);
+        background-color: rgba(0,0,0,0.4);
+        padding-top: 60px;
+	    }
+	
+	    .modal-content {
+	        background-color: #fefefe;
+	        margin: 5% auto;
+	        padding: 20px;
+	        border: 1px solid #888;
+	        width: 80%;
+	    }
+	
+	    .close {
+	        color: #aaa;
+	        float: right;
+	        font-size: 28px;
+	        font-weight: bold;
+	    }
+	
+	    .close:hover,
+	    .close:focus {
+	        color: black;
+	        text-decoration: none;
+	        cursor: pointer;
+	    }
+    </style>
+</head>
+<body class="bg-slate-400 w-screen h-screen">
+	
+	<div class="flex justify-center items-center h-full">
+		
+		<h1 class="absolute top-24 left-32 text-5xl">本社審査</h1>
+	    <form action="#" th:action="@{/holiday_final_review}" method="post" th:object="${holidayAcquireList}" class="mb-12">
+	        <table class="border-collapse border border-lime-900">
+	            <thead>
+	                <tr>
+	                    <th>現場</th>
+	                    <th>社員番号</th>
+	                    <th>開始</th>
+	                    <th>終了</th>
+	                </tr>
+	            </thead>
+	            <tbody>
+				    <tr th:each="l, rowStat : ${holidayAcquireList}" class="clickable-row" data-href="#" th:id="'row_' + ${rowStat.index}" th:attr="data-holidayAcquireNo=${l.holidayAcquireNo}, data-vacationNo=${l.vacationNo}, data-reason=${l.reason}">
+	    				<td th:text="${l.selectedWorkSpot}"></td>
+				        <td th:text="${l.workSpotDepart}"></td>
+	                    <td th:text="${l.startYear}+'/'+${l.startMonth}+'/'+${l.startDay}+' '+${l.startTime}"></td>
+	                    <td th:text="${l.endYear}+'/'+${l.endMonth}+'/'+${l.endDay}+' '+${l.endTime}"></td>
+	                </tr>
+	            </tbody>
+	        </table>
+	    </form>
+	    
+	    <div id="myModal" class="modal">
+		    <div class="modal-content">
+		        <span class="close" onclick="closeModal()">&times;</span>
+		        <p id="modalContent"></p>
+	        	<div id="rejectionReasonContainer"></div>
+		        <button onclick="CloseModal()">改修</button>
+		        <button onclick="DeniedModal()">却下</button>
+		        <button onclick="AcceptModal()">承認</button>
+		    </div>
+		</div>
+	</div>
+    
+</body>
+</html>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var rows = document.querySelectorAll('.clickable-row');
+
+    rows.forEach(function (row) {
+        row.addEventListener('click', function () {
+            // 移除之前被点击行的 'clicked' 类
+            document.querySelector('.clickable-row.clicked')?.classList.remove('clicked');
+            
+            // 将 'clicked' 类添加到当前被点击的行
+            row.classList.add('clicked');
+
+            let holidayAcquireNo = row.getAttribute('data-holidayAcquireNo');
+            let selectedWorkSpot = row.querySelector('td:nth-child(1)').textContent;
+            let workSpotDepart = row.querySelector('td:nth-child(2)').textContent;
+            let startDateTime = row.querySelector('td:nth-child(3)').textContent;
+            let endDateTime = row.querySelector('td:nth-child(4)').textContent;
+            let vacationNo = row.getAttribute('data-vacationNo');
+            let reason = row.getAttribute('data-reason');
+
+            // 填充模态框内容
+            document.getElementById('modalContent').innerHTML =
+                "現場: " + selectedWorkSpot + "<br>" +
+                "社員番号: " + workSpotDepart + "<br>" +
+                "開始: " + startDateTime + "<br>" +
+                "結束: " + endDateTime + "<br>" +
+                "休暇種類: " + vacationNo + "<br>" +
+                "休暇理由: " + reason + "<br>";
+
+            document.getElementById('rejectionReasonContainer').innerHTML =
+                '却下理由: <input type="text" class="border-2 border-black" id="rejectionReason" name="rejectionReason" placeholder="却下理由">';
+
+            // 打开模态框
+            document.getElementById('myModal').style.display = "block";
+        });
+    });
+});
+
+function CloseModal() {
+    // 关闭模态框
+    document.getElementById('myModal').style.display = "none";
+}
+
+function DeniedModal() {
+    // 获取 holidayAcquireNo 和 reason
+    let holidayAcquireNo = document.querySelector('.clickable-row.clicked').getAttribute('data-holidayAcquireNo');
+    let reason = document.getElementById('rejectionReason').value;
+
+	if(reason == ""){
+		alert("reason is empty!");
+    	return;
+	}
+
+    // 发送 AJAX 请求到 Controller
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', '/user/pcDenied', true);
+    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            // 更新列表数据
+            updateHolidayFinalReview();
+        } else {
+            // 处理错误
+            Alert('失败');
+        }
+    };
+
+    // 发送请求
+    xhr.send(JSON.stringify({ 'holidayAcquireNo': holidayAcquireNo, 'reason': reason }));
+
+    // 关闭模态框
+    document.getElementById('myModal').style.display = "none";
+}
+
+
+function AcceptModal() {
+    // 获取 holidayAcquireNo
+    let holidayAcquireNo = document.querySelector('.clickable-row.clicked').getAttribute('data-holidayAcquireNo');
+
+    // 发送 AJAX 请求到 Controller
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', '/user/pcAccept', true);
+    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            // 更新列表数据
+            updateHolidayFinalReview();
+        } else {
+            showAlert('失败');
+        }
+    };
+
+    // 发送请求
+    xhr.send(JSON.stringify({ 'holidayAcquireNo': holidayAcquireNo }));
+
+    // 关闭模态框
+    document.getElementById('myModal').style.display = "none";
+}
+
+// 新增一个函数，用于更新列表数据
+function updateHolidayFinalReview() {
+    location.reload();
+}
+
+</script>
+
