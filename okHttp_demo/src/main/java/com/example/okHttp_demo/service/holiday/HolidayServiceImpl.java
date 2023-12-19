@@ -1,9 +1,11 @@
 package com.example.okHttp_demo.service.holiday;
 
 import com.example.okHttp_demo.constants.RtnCode;
+import com.example.okHttp_demo.dao.CommonDao;
 import com.example.okHttp_demo.dao.HolidayAcuireDao;
 import com.example.okHttp_demo.dao.HolidayAcuireSequenceDao;
 import com.example.okHttp_demo.dao.UserDao;
+import com.example.okHttp_demo.entity.Common;
 import com.example.okHttp_demo.entity.HolidayAcquire;
 import com.example.okHttp_demo.entity.HolidayAcquireSequence;
 import com.example.okHttp_demo.entity.User;
@@ -30,6 +32,9 @@ public class HolidayServiceImpl implements HolidayService{
     
     @Autowired
     private UserDao uDao;
+    
+    @Autowired
+    private CommonDao cDao;
     
     /**
      * カレンダーナンバーの採番を取得する。 作成者:許智偉
@@ -180,15 +185,23 @@ public class HolidayServiceImpl implements HolidayService{
         holidayAcquire.setEndTime(endTimeSave);
 //      休暇日数を設定
         holidayAcquire.setVacationDays(endDay-startDay+1);
-//      休暇番号を設定
-        if(leaveType.matches("私用"))
-            holidayAcquire.setVacationNo("11");
-        else if(leaveType.matches("体調不良"))
-            holidayAcquire.setVacationNo("12");
-        else if(leaveType.matches("振替"))
-            holidayAcquire.setVacationNo("13");
-        else
-            holidayAcquire.setVacationNo("14");
+////      休暇番号を設定
+//        if(leaveType.matches("私用"))
+//            holidayAcquire.setVacationNo("11");
+//        else if(leaveType.matches("体調不良"))
+//            holidayAcquire.setVacationNo("12");
+//        else if(leaveType.matches("振替"))
+//            holidayAcquire.setVacationNo("13");
+//        else
+//            holidayAcquire.setVacationNo("14");
+        List<Common> vacationNoList = cDao.findByCateNo("1");
+        for (Common item : vacationNoList) {
+            if(leaveType.matches(item.getName())) {
+                holidayAcquire.setVacationNo(item.getSubCateNo());
+                break;        
+            }
+        }
+        
 //      休暇理由を設定
         holidayAcquire.setReason(reason);
 //      社員番号を設定
@@ -253,6 +266,20 @@ public class HolidayServiceImpl implements HolidayService{
         
 //      休暇申込の作成結果を返す
         return new BaseResponse<HolidayAcquireRes>(RtnCode.INSERT_SUCCESSFUL.getCode(), RtnCode.INSERT_SUCCESSFUL.getMessage(), new HolidayAcquireRes(holidayAcquire.getHolidayAcquireNo()));
+    }
+
+    @Override
+    public BaseResponse<String[]> GetAllVacationNo() {
+
+        List<Common> res = cDao.findByCateNo("1");
+        String[] allVacationNo = new String[res.size()];
+        int counter = 0;
+        for (Common item : res) {
+            allVacationNo[counter] = item.getName();
+            counter++;
+        }
+        
+        return new BaseResponse<String[]>(RtnCode.INSERT_SUCCESSFUL.getCode(), RtnCode.INSERT_SUCCESSFUL.getMessage(), allVacationNo);
     }
 
 

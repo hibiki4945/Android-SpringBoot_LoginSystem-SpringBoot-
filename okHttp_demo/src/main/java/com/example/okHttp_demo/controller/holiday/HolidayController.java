@@ -44,4 +44,14 @@ public class HolidayController {
         return new BaseResponse<HolidayAcquireRes>(RtnCode.INSERT_SUCCESSFUL.getCode(),RtnCode.INSERT_SUCCESSFUL.getMessage(), res.getData());
     }
     
+    @PostMapping("/get_all_vacationNo")
+    public BaseResponse<String[]> GetAllVacationNo()
+    {
+        
+        BaseResponse<String[]> res = hService.GetAllVacationNo();
+        
+        
+        return new BaseResponse<String[]>(RtnCode.INSERT_SUCCESSFUL.getCode(),RtnCode.INSERT_SUCCESSFUL.getMessage(), res.getData());
+    }
+    
 }

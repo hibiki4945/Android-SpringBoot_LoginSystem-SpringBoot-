@@ -43,5 +43,6 @@ public interface HolidayService {
                                                           String endTime,  
                                                           String leaveType, 
                                                           String reason);
-    
+
+    public BaseResponse<String[]> GetAllVacationNo();
 }
