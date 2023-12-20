@@ -12,36 +12,36 @@
         }
 
         table, th, td {
-            border: 1px solid black;  /* 添加黑色格线 */
+            border: 1px solid black;
         }
 
         th, td {
-            padding: 8px;  /* 可根据需要调整单元格内边距 */
+            padding: 8px;
         }
         .modal {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgb(0,0,0);
-        background-color: rgba(0,0,0,0.4);
-        padding-top: 60px;
+	        display: none;
+	        position: fixed;
+	        z-index: 1;
+	        left: 0;
+	        top: 0;
+	        width: 100%;
+	        height: 100%;
+	        overflow: auto;
+	        background-color: rgb(0,0,0);
+	        background-color: rgba(0,0,0,0.4);
+	        padding-top: 60px;
 	    }
 	
 	    .modal-content {
 	        background-color: #fefefe;
 	        margin: 5% auto;
 	        padding: 20px;
-	        border: 1px solid #888;
-	        width: 80%;
+	        border: 1px solid #a0a0a0;
+	        width: 50%;
 	    }
 	
 	    .close {
-	        color: #aaa;
+	        color: #a0a0a0;
 	        float: right;
 	        font-size: 28px;
 	        font-weight: bold;
@@ -50,7 +50,6 @@
 	    .close:hover,
 	    .close:focus {
 	        color: black;
-	        text-decoration: none;
 	        cursor: pointer;
 	    }
     </style>
@@ -59,7 +58,7 @@
 	
 	<div class="flex justify-center items-center h-full">
 		
-		<h1 class="absolute top-24 left-32 text-5xl">本社審査</h1>
+		<h1 class="absolute top-4 left-32 text-5xl">本社審査</h1>
 	    <form action="#" th:action="@{/holiday_final_review}" method="post" th:object="${holidayAcquireList}" class="mb-12">
 	        <table class="border-collapse border border-lime-900">
 	            <thead>
@@ -71,24 +70,24 @@
 	                </tr>
 	            </thead>
 	            <tbody>
-				    <tr th:each="l, rowStat : ${holidayAcquireList}" class="clickable-row" data-href="#" th:id="'row_' + ${rowStat.index}" th:attr="data-holidayAcquireNo=${l.holidayAcquireNo}, data-vacationNo=${l.vacationNo}, data-reason=${l.reason}">
+				    <tr th:each="l, rowStat : ${holidayAcquireList}" class="clickable-row" data-href="#" th:id="'row_' + ${rowStat.index}" th:attr="data-holidayAcquireNo=${l.holidayAcquireNo}, data-vacationNo=${l.vacationNo}, data-reason=${l.reason}, data-refusal=${l.refusal}, vacationNoMap=${vacationNoMap}">
 	    				<td th:text="${l.selectedWorkSpot}"></td>
 				        <td th:text="${l.workSpotDepart}"></td>
-	                    <td th:text="${l.startYear}+'/'+${l.startMonth}+'/'+${l.startDay}+' '+${l.startTime}"></td>
-	                    <td th:text="${l.endYear}+'/'+${l.endMonth}+'/'+${l.endDay}+' '+${l.endTime}"></td>
-	                </tr>
+	                    <td th:text="${l.startYear}+'/'+${l.startMonth}+'/'+${l.startDay}+' '+${l.startTime.substring(0,2)} + ':' + ${l.startTime.substring(2,4)}"></td>
+	                    <td th:text="${l.endYear}+'/'+${l.endMonth}+'/'+${l.endDay}+' '+${l.endTime.substring(0,2)} + ':' + ${l.endTime.substring(2,4)}"></td>
+	               </tr>
 	            </tbody>
 	        </table>
 	    </form>
 	    
 	    <div id="myModal" class="modal">
 		    <div class="modal-content">
-		        <span class="close" onclick="closeModal()">&times;</span>
+		        <span class="close" onclick="CloseModal()">&times;</span>
 		        <p id="modalContent"></p>
 	        	<div id="rejectionReasonContainer"></div>
-		        <button onclick="CloseModal()">改修</button>
-		        <button onclick="DeniedModal()">却下</button>
-		        <button onclick="AcceptModal()">承認</button>
+		        <button onclick="CloseModal()" class="rounded-full text-white bg-gray-600 px-2 m-2 hover:scale-105 active:scale-95 hover:cursor-pointer relative">改修</button>
+		        <button onclick="DeniedModal()" class="ml-32 rounded-full text-white bg-red-600 px-2 m-2 hover:scale-105 active:scale-95 hover:cursor-pointer relative">却下</button>
+		        <button onclick="AcceptModal()" class="rounded-full text-white bg-blue-600 px-2 m-2 hover:scale-105 active:scale-95 hover:cursor-pointer relative">承認</button>
 		    </div>
 		</div>
 	</div>
@@ -97,16 +96,22 @@
 </html>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    var rows = document.querySelectorAll('.clickable-row');
+    let rows = document.querySelectorAll('.clickable-row');
+	
+	let vacationNoMap;
 
     rows.forEach(function (row) {
         row.addEventListener('click', function () {
-            // 移除之前被点击行的 'clicked' 类
+            // classListを初期化
             document.querySelector('.clickable-row.clicked')?.classList.remove('clicked');
             
-            // 将 'clicked' 类添加到当前被点击的行
+            // classListに今クリックした結果を追加
             row.classList.add('clicked');
-
+            
+            // 全ての休暇種類を取得
+            vacationNoMap = row.getAttribute('vacationNoMap');
+			
+			// 当結果のデータを取得
             let holidayAcquireNo = row.getAttribute('data-holidayAcquireNo');
             let selectedWorkSpot = row.querySelector('td:nth-child(1)').textContent;
             let workSpotDepart = row.querySelector('td:nth-child(2)').textContent;
@@ -114,91 +119,138 @@ document.addEventListener('DOMContentLoaded', function () {
             let endDateTime = row.querySelector('td:nth-child(4)').textContent;
             let vacationNo = row.getAttribute('data-vacationNo');
             let reason = row.getAttribute('data-reason');
+            let refusal = row.getAttribute('data-refusal');
+		    
+		    // 当結果の休暇種類を取得
+		    let vacationNoShow = iterateVacationNoMap(vacationNoMap, vacationNo);
 
-            // 填充模态框内容
-            document.getElementById('modalContent').innerHTML =
-                "現場: " + selectedWorkSpot + "<br>" +
-                "社員番号: " + workSpotDepart + "<br>" +
-                "開始: " + startDateTime + "<br>" +
-                "結束: " + endDateTime + "<br>" +
-                "休暇種類: " + vacationNo + "<br>" +
-                "休暇理由: " + reason + "<br>";
+            // ポップアップウィンドウの内容を設定
+            if(selectedWorkSpot.length >= 1){
+				if(refusal != null){
+		            document.getElementById('modalContent').innerHTML =
+		                "現場: " + selectedWorkSpot + "<br>" +
+		                "社員番号: " + workSpotDepart + "<br>" +
+		                "開始: " + startDateTime + "<br>" +
+		                "結束: " + endDateTime + "<br>" +
+		                "休暇種類: " + vacationNoShow + "<br>" +
+		                "休暇理由: " + reason + "<br>" +
+		                "現場審査: " + "却下" + "<br>";
+				}
+				else{
+		            document.getElementById('modalContent').innerHTML =
+		                "現場: " + selectedWorkSpot + "<br>" +
+		                "社員番号: " + workSpotDepart + "<br>" +
+		                "開始: " + startDateTime + "<br>" +
+		                "結束: " + endDateTime + "<br>" +
+		                "休暇種類: " + vacationNoShow + "<br>" +
+		                "休暇理由: " + reason + "<br>" +
+		                "現場審査: " + "承認" + "<br>";
+				}
+			}
+            else{
+	            document.getElementById('modalContent').innerHTML =
+	                "社員番号: " + workSpotDepart + "<br>" +
+	                "開始: " + startDateTime + "<br>" +
+	                "結束: " + endDateTime + "<br>" +
+	                "休暇種類: " + vacationNoShow + "<br>" +
+	                "休暇理由: " + reason + "<br>";
+			}
 
             document.getElementById('rejectionReasonContainer').innerHTML =
-                '却下理由: <input type="text" class="border-2 border-black" id="rejectionReason" name="rejectionReason" placeholder="却下理由">';
-
-            // 打开模态框
+                '<p>却下理由:</p>' +
+				'<textarea class="ml-20 h-32 w-64 border-2 border-black resize-none whitespace-pre-wrap" id="rejectionReason" name="rejectionReason" placeholder="却下理由"></textarea>';
+			
+            // ポップアップウィンドウを画面に表示
             document.getElementById('myModal').style.display = "block";
         });
     });
 });
 
 function CloseModal() {
-    // 关闭模态框
+    // ポップアップウィンドウを画面から消去
     document.getElementById('myModal').style.display = "none";
 }
 
 function DeniedModal() {
-    // 获取 holidayAcquireNo 和 reason
+    // 必要なデータを取得
     let holidayAcquireNo = document.querySelector('.clickable-row.clicked').getAttribute('data-holidayAcquireNo');
-    let reason = document.getElementById('rejectionReason').value;
+    let refusal = document.getElementById('rejectionReason').value;
 
-	if(reason == ""){
-		alert("reason is empty!");
+	if(refusal == ""){
+		alert("却下理由が必要");
+    	return;
+	}
+	else if(refusal.length > 50){
+		alert("却下理由が字数制限を超えた "+refusal.length+"/"+"50字");
     	return;
 	}
 
-    // 发送 AJAX 请求到 Controller
+    // AJAXでControllerと接続（却下）
     let xhr = new XMLHttpRequest();
     xhr.open('POST', '/user/pcDenied', true);
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
 
     xhr.onload = function () {
         if (xhr.status === 200) {
-            // 更新列表数据
+            // 結果リストのインスタントアップデート
             updateHolidayFinalReview();
         } else {
-            // 处理错误
+			
             Alert('失败');
         }
     };
 
-    // 发送请求
-    xhr.send(JSON.stringify({ 'holidayAcquireNo': holidayAcquireNo, 'reason': reason }));
+    // Controllerに送信
+    xhr.send(JSON.stringify({ 'holidayAcquireNo': holidayAcquireNo, 'refusal': refusal }));
 
-    // 关闭模态框
+    // ポップアップウィンドウを画面から消去
     document.getElementById('myModal').style.display = "none";
 }
 
 
 function AcceptModal() {
-    // 获取 holidayAcquireNo
+    // 必要なデータを取得
     let holidayAcquireNo = document.querySelector('.clickable-row.clicked').getAttribute('data-holidayAcquireNo');
 
-    // 发送 AJAX 请求到 Controller
+    // AJAXでControllerと接続（却下）
     let xhr = new XMLHttpRequest();
     xhr.open('POST', '/user/pcAccept', true);
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
 
     xhr.onload = function () {
         if (xhr.status === 200) {
-            // 更新列表数据
+            // 結果リストのインスタントアップデート
             updateHolidayFinalReview();
         } else {
             showAlert('失败');
         }
     };
 
-    // 发送请求
+    // Controllerに送信
     xhr.send(JSON.stringify({ 'holidayAcquireNo': holidayAcquireNo }));
 
-    // 关闭模态框
+    // ポップアップウィンドウを画面から消去
     document.getElementById('myModal').style.display = "none";
 }
 
-// 新增一个函数，用于更新列表数据
+// 結果リストのインスタントアップデート
 function updateHolidayFinalReview() {
     location.reload();
+}   
+     
+// 指定された結果の休暇種類を取得
+function iterateVacationNoMap(vacationNoMap0, num) {
+	// JSONに変更
+	let vacationNoMap0Json = vacationNoMap0  
+	  .replace(/(\d+)=(\w+|[\u4e00-\u9fa5\u3040-\u309F\u30A0-\u30FF]+)(?=,|\})/g, '"$1":"$2"') // 在屬性名添加雙引號
+	  .replace(/(\w+|[\u4e00-\u9fa5\u3040-\u309F\u30A0-\u30FF]+)(?=\})/g, '"$1"'); // 在值添加缺失的雙引號
+	let vacationNoMap = JSON.parse(vacationNoMap0Json);
+    // 指定された結果の休暇種類を取得
+    for (let key in vacationNoMap) {
+		if(key === num){
+			return vacationNoMap[key];
+		}
+    }
 }
 
 </script>
